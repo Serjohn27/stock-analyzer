@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-technical-search',
@@ -7,9 +8,16 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class TechnicalSearchComponent implements OnInit {
 
-  constructor() { }
+  searchForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
+
+    this.searchForm = this.formBuilder.group({
+       criteriaSelect: ['default'],
+      // datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
+    });
   }
 
 }

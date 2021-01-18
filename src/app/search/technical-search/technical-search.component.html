@@ -1,1 +1,15 @@
 <p class="title">Technical Search</p>
+<form [formGroup]="searchForm">
+    <select class="select-box" formControlName="criteriaSelect">
+        <option class="defaultSelection" value="default" disabled>Select a technical indicator</option>
+        <option>RSI (14)</option>
+        <option>EMA (50)</option>
+        <option>Price</option>
+        <option>Price Range</option>
+        <option>Volume</option>
+        <option>Volume Range</option>
+        <option>Float</option>
+        <option>Market Cap</option>
+    </select>
+
+</form>
