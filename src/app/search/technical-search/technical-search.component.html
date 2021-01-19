@@ -1,15 +1,15 @@
 <p class="title">Technical Search</p>
 <form [formGroup]="searchForm">
-    <select class="select-box" formControlName="criteriaSelect">
+    <select class="select-box"  formControlName="criteriaSelect" [style.color]="!searchForm.get('criteriaSelect').touched && !searchForm.get('criteriaSelect').dirty?'#62757f':'white'">
         <option class="defaultSelection" value="default" disabled>Select a technical indicator</option>
-        <option>RSI (14)</option>
-        <option>EMA (50)</option>
-        <option>Price</option>
-        <option>Price Range</option>
-        <option>Volume</option>
-        <option>Volume Range</option>
-        <option>Float</option>
-        <option>Market Cap</option>
+        <option class="option">RSI (14)</option>
+        <option class="option">EMA (50)</option>
+        <option class="option">Price</option>
+        <option class="option">Price Range</option>
+        <option class="option">Volume</option>
+        <option class="option">Volume Range</option>
+        <option class="option">Float</option>
+        <option class="option">Market Cap</option>
     </select>
 
 </form>

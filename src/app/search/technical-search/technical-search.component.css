@@ -1,28 +1,21 @@
 .title {
     font-size: 24px;
-     margin-left: 10px;
+    margin-left: 10px;
 }
 
 .select-box {
     border: 0px;
     background-color: #f2f2f2;
-    padding: 10px 6px 10px 16px ;
+    padding: 10px 6px 10px 16px;
     margin-top: 6px;
     border-radius: 10px;
     width: 50%;
     height: 56px;
     outline: none;
     background-color: #1c313a;
-  }
+}
 
-
- select:valid {
+.option {
     color: white;
- }
-
- .defaultSelection {
-    color: grey !important;
- }
-
-
+}
 
