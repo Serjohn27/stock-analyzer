@@ -2,52 +2,48 @@
 <form [formGroup]="searchForm">
 
     <div fxLayout="row">
-        <div id="selectContainer" style="background-color: red;">
-            1
+        <div fxFlex="40" id="selectContainer">
+            <select class="select-box" formControlName="criteriaSelect"
+                [style.color]="!searchForm.get('criteriaSelect').touched && !searchForm.get('criteriaSelect').dirty?'#62757f':'white'">
+                <option class="defaultSelection" value="default" disabled>Select a technical indicator</option>
+                <option class="option">RSI (14)</option>
+                <option class="option">EMA (50)</option>
+                <option class="option">Price</option>
+                <option class="option">Price Range</option>
+                <option class="option">Volume</option>
+                <option class="option">Volume Range</option>
+                <option class="option">Float</option>
+                <option class="option">Market Cap</option>
+            </select>
+            <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
         </div>
 
-        <div id="selectContainer2" style="background-color: blue;">
-            2
+        <div fxFlexOffset="2" fxFlex="16" id="selectContainer2">
+            <select id="sign-select" class="select-box" formControlName="criteriaSelect"
+                [style.color]="!searchForm.get('criteriaSelect').touched && !searchForm.get('criteriaSelect').dirty?'#62757f':'white'">
+                <option class="defaultSelection" value="default">></option>
+                <option class="option">
+                    <</option>
+                <option class="option">
+                    <=</option>
+                <option class="option">>=</option>
+                <option class="option">=</option>
+            </select>
+            <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
         </div>
 
-        <div id="selectContainer3" style="background-color: green;">
-            3
+        <div fxLayout="row" fxFlexOffset="2" fxFlex="38" id="selectContainer3">
+            <input id="input-box" class="select-box" type="text">
+            <button id="cancel-button">
+                <svg id="cancel-icon" height="329pt" viewBox="0 0 329.26933 329" width="329pt"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" />
+                </svg>
+            </button>
         </div>
 
     </div>
 
 
-
 </form>
-
-
-
-
-
-
-
-
-<!-- <select class="select-box"  formControlName="criteriaSelect" [style.color]="!searchForm.get('criteriaSelect').touched && !searchForm.get('criteriaSelect').dirty?'#62757f':'white'"  >
-    <option class="defaultSelection" value="default" disabled>Select a technical indicator</option>
-    <option class="option">RSI (14)</option>
-    <option class="option">EMA (50)</option>
-    <option class="option">Price</option>
-    <option class="option">Price Range</option>
-    <option class="option">Volume</option>
-    <option class="option">Volume Range</option>
-    <option class="option">Float</option>
-    <option class="option">Market Cap</option>
-</select>
-<fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
-
-
-<select id="sign-select" class="select-box"  formControlName="criteriaSelect" [style.color]="!searchForm.get('criteriaSelect').touched && !searchForm.get('criteriaSelect').dirty?'#62757f':'white'"  >
-    <option class="defaultSelection" value="default">></option>
-    <option class="option"><</option>
-    <option class="option"><=</option>
-    <option class="option">>=</option>
-    <option class="option">=</option>
-</select>
-<fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
-<input id="input-box" class="select-box" type="text">
-<button id="cancel-button"><svg id="cancel-icon" height="329pt" viewBox="0 0 329.26933 329" width="329pt" xmlns="http://www.w3.org/2000/svg"><path d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0"/></svg></button> -->
