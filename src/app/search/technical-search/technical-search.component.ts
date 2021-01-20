@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-technical-search',
@@ -9,6 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class TechnicalSearchComponent implements OnInit {
 
   searchForm: FormGroup;
+  faChevronDown = faChevronDown;
 
   constructor(private formBuilder: FormBuilder) { }
 
