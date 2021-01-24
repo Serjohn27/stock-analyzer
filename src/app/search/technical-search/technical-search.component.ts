@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -11,33 +11,81 @@ export class TechnicalSearchComponent implements OnInit {
 
   searchForm: FormGroup;
   faChevronDown = faChevronDown;
-  filterCount: number = 0; 
+  filterCount: number = 0;
   hint: string = 'Select a criteria from dropdown on the left';
+  criteriaOptions: any[] = [
+    { id: 'rsi', name: 'RSI (14)' },
+    { id: 'ema', name: 'EMA (50)' },
+    { id: 'price', name: 'Price' },
+    { id: 'pricerange', name: 'Price Range' },
+    { id: 'volume', name: 'Volume' },
+    { id: 'volumerange', name: 'Volume Range' },
+    { id: 'float', name: 'Float' },
+    { id: 'marketcap', name: 'Market Cap' }
+  ];
+
+  expressionOptions: any[] = [
+    { id: "lt", name: "<" },
+    { id: "eq", name: "=" },
+    { id: "lte", name: "<=" },
+    { id: "gte", name: ">=" },
+    { id: "gt", name: ">" },
+  ]
+
+
 
   constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
 
     this.searchForm = this.formBuilder.group({
-       criteriaSelect: ['default'],
-       expressionSelect: ['default'],
+      name: '',
+      criterias: this.formBuilder.array([])
+    })
+
+    this.addCriteria();
+
+
+  }
+
+  newCriteria() {
+    return this.formBuilder.group({
+      criteriaSelect: ['default'],
+      expressionSelect: ['default'],
+      criteriaValue: [],
       // datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
     });
   }
 
-  addCriteria(){ 
-    if (this.searchForm.get('criteriaSelect') != null && this.searchForm.get('criteriaSelect').value != 'default' && !this.searchForm.contains(this.searchForm.get('criteriaSelect').value)) {
-      this.searchForm.addControl(this.searchForm.get('criteriaSelect').value, this.formBuilder.control(['']));
-      this.searchForm.get('criteriaSelect').setValue('default');
-      this.filterCount++;
-      console.log('Current filter count ' + this.filterCount);
-      console.log(this.searchForm.value)
+  criterias(): FormArray {
+    return this.searchForm.get("criterias") as FormArray;
+  }
+
+  addCriteria() {
+    this.criterias().push(this.newCriteria());
+  }
+
+  removeCriteria(index: number) {
+    // Keep the very first form
+    if (index != 0) {
+      this.criterias().removeAt(index);
     }
-
   }
 
-  removeCriteria(criteria: string) {
-    this.searchForm.removeControl(criteria);
+  onOptionSelected(selection: string) {
+    console.log('Option is selected' + selection);
+    if (selection == 'rsi') {
+      this.hint = 'Enter value for rsi eg: 30 (oversold)';
+    }
   }
+
+  getPlaceHolder() {
+    return this.hint;
+  }
+
+  // removeCriteria(criteria: string) {
+  //   this.searchForm.removeControl(criteria);
+  //   this.searchForm.get('criteriaValue').setValue('Enter a value now');
+  // }
 
 }

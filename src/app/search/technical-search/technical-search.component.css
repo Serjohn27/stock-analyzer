@@ -15,6 +15,7 @@
 
 #sign-select {
     font-size: 24px;
+    vertical-align: middle;
 }
 
 #input-box {
@@ -107,4 +108,12 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.option {
+    color: white;
+}
+
+.defaultOption {
+    color: #62757f;
 }
