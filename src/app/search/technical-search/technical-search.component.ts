@@ -13,24 +13,9 @@ export class TechnicalSearchComponent implements OnInit {
   faChevronDown = faChevronDown;
   filterCount: number = 0;
   hint: string = 'Select a criteria from dropdown on the left';
-  criteriaOptions: any[] = [
-    { id: 'rsi', name: 'RSI (14)' },
-    { id: 'ema', name: 'EMA (50)' },
-    { id: 'price', name: 'Price' },
-    { id: 'pricerange', name: 'Price Range' },
-    { id: 'volume', name: 'Volume' },
-    { id: 'volumerange', name: 'Volume Range' },
-    { id: 'float', name: 'Float' },
-    { id: 'marketcap', name: 'Market Cap' }
-  ];
 
-  expressionOptions: any[] = [
-    { id: "lt", name: "<" },
-    { id: "eq", name: "=" },
-    { id: "lte", name: "<=" },
-    { id: "gte", name: ">=" },
-    { id: "gt", name: ">" },
-  ]
+
+
 
 
 
@@ -41,11 +26,8 @@ export class TechnicalSearchComponent implements OnInit {
     this.searchForm = this.formBuilder.group({
       name: '',
       criterias: this.formBuilder.array([])
-    })
-
+    });
     this.addCriteria();
-
-
   }
 
   newCriteria() {
@@ -59,6 +41,29 @@ export class TechnicalSearchComponent implements OnInit {
 
   criterias(): FormArray {
     return this.searchForm.get("criterias") as FormArray;
+  }
+
+  getCriteriaOptions(): any {
+    return [
+      { id: 'rsi', name: 'RSI (14)' },
+      { id: 'ema', name: 'EMA (50)' },
+      { id: 'price', name: 'Price' },
+      { id: 'pricerange', name: 'Price Range' },
+      { id: 'volume', name: 'Volume' },
+      { id: 'volumerange', name: 'Volume Range' },
+      { id: 'float', name: 'Float' },
+      { id: 'marketcap', name: 'Market Cap' }
+    ];
+  }
+
+  getExpressionOptions(): any {
+    return [
+      { id: "lt", name: "<" },
+      { id: "eq", name: "=" },
+      { id: "lte", name: "<=" },
+      { id: "gte", name: ">=" },
+      { id: "gt", name: ">" },
+    ]
   }
 
   addCriteria() {

@@ -7,9 +7,9 @@
                 [style.color]="!criteria.dirty?'#62757f':'white'">
                 <option class="defaultOption" value="default" [selected]=true [disabled]="true">Select a technical
                     indicator</option>
-                <option class="option" *ngFor="let dropdownOption of criteriaOptions; let i = index"
-                    [value]="criteriaOptions[i].id">
-                    {{criteriaOptions[i].name}}
+                <option class="option" *ngFor="let dropdownOption of getCriteriaOptions(); let i = index"
+                    [value]="getCriteriaOptions()[i].id">
+                    {{getCriteriaOptions()[i].name}}
                 </option>
             </select>
             <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
@@ -19,9 +19,9 @@
             <select id="sign-select" class="select-box" formControlName="expressionSelect"
                 style="color: white;">
                 <option class="option" value="default" [selected]=true>></option>
-                <option class="option" *ngFor="let expressionOption of expressionOptions;let i = index"
-                    [value]="expressionOptions[i].id" [selected]=true>
-                    {{expressionOptions[i].name}}
+                <option class="option" *ngFor="let expressionOption of getExpressionOptions();let i = index"
+                    [value]="getExpressionOptions()[i].id" [selected]=true>
+                    {{getExpressionOptions()[i].name}}
                 </option>
             </select>
             <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
@@ -30,7 +30,7 @@
         
         <div fxLayout="row" fxFlexOffset="2" fxFlex="40" [formGroupName]="i">
             <input id="input-box" formControlName="criteriaValue" class="select-box" type="number" [placeholder]="getPlaceHolder()"
-                [attr.disabled]="criteria.value == 'default' ? 'disabled' : null">
+                [attr.disabled]="criteria.value.criteriaSelect == 'default' ? 'disabled' : null">
             <button id="cancel-button" (click)="removeCriteria(i)">
                 <svg id="cancel-icon" height="329pt" viewBox="0 0 329.26933 329" width="329pt"
                     xmlns="http://www.w3.org/2000/svg">
