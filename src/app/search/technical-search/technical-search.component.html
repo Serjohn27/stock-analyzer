@@ -2,9 +2,9 @@
 <form [formGroup]="searchForm">
 
     <div formArrayName="criterias" *ngFor="let criteria of criterias().controls;let i=index" class="selectContainer">
-        <div fxFlex="42" [formGroupName]="i" >
-            <select class="select-box" formControlName="criteriaSelect" (change)="onOptionSelected($event.target.value)"
-                [style.color]="!criteria.dirty?'#62757f':'white'">
+        <div fxFlex="42" [formGroupName]="i">
+            <select class="select-box" formControlName="criteriaSelect"
+                (change)="onOptionSelected($event.target.value,i)" [style.color]="!criteria.dirty?'#62757f':'white'">
                 <option class="defaultOption" value="default" [selected]=true [disabled]="true">Select a technical
                     indicator</option>
                 <option class="option" *ngFor="let dropdownOption of getCriteriaOptions(); let i = index"
@@ -16,8 +16,7 @@
         </div>
 
         <div fxFlexOffset="2" fxFlex="10" [formGroupName]="i">
-            <select id="sign-select" class="select-box" formControlName="expressionSelect"
-                style="color: white;">
+            <select id="sign-select" class="select-box" formControlName="expressionSelect" style="color: white;">
                 <option class="option" value="default" [selected]=true>></option>
                 <option class="option" *ngFor="let expressionOption of getExpressionOptions();let i = index"
                     [value]="getExpressionOptions()[i].id" [selected]=true>
@@ -27,10 +26,23 @@
             <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
         </div>
 
-        
+
         <div fxLayout="row" fxFlexOffset="2" fxFlex="40" [formGroupName]="i">
-            <input id="input-box" formControlName="criteriaValue" class="select-box" type="number" [placeholder]="getPlaceHolder()"
-                [attr.disabled]="criteria.value.criteriaSelect == 'default' ? 'disabled' : null">
+        
+                <input *ngIf="templates[i] && templates[i].type=='input'" id="input-box" formControlName="criteriaValue" class="select-box" type="number"
+                    [placeholder]="templates[i].hint"
+                    [attr.disabled]="criteria.value.criteriaSelect == 'default' ? 'disabled' : null">
+         
+    
+                <select *ngIf="templates[i] && templates[i].type=='select'" id="sign-select" class="select-box" formControlName="criteriaValue" style="color: white;">
+                    <!-- <option class="option" value="default" [selected]=true>{{templates[i].default}}</option> -->
+                    <option class="option" *ngFor="let option of templates[i].options;let i = index"
+                        [value]="option.id" [selected]=true>
+                        {{option.name}}
+                    </option>
+                </select>
+         
+
             <button id="cancel-button" (click)="removeCriteria(i)">
                 <svg id="cancel-icon" height="329pt" viewBox="0 0 329.26933 329" width="329pt"
                     xmlns="http://www.w3.org/2000/svg">
@@ -42,5 +54,5 @@
 
 
     </div>
-     <button id="add-button" (click)="addCriteria()">Add Criteria</button>
+    <button id="add-button" (click)="addCriteria()">Add Criteria</button>
 </form>

@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {  Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -12,10 +12,8 @@ export class TechnicalSearchComponent implements OnInit {
   searchForm: FormGroup;
   faChevronDown = faChevronDown;
   filterCount: number = 0;
-  hint: string = 'Select a criteria from dropdown on the left';
-
-
-
+  hints: string[] = [];
+  templates: any[] = [];
 
 
 
@@ -28,6 +26,10 @@ export class TechnicalSearchComponent implements OnInit {
       criterias: this.formBuilder.array([])
     });
     this.addCriteria();
+    this.templates[0] = {
+      type: 'input',
+      hint: 'Select a criteria from dropdown on the left'
+    };
   }
 
   newCriteria() {
@@ -68,6 +70,10 @@ export class TechnicalSearchComponent implements OnInit {
 
   addCriteria() {
     this.criterias().push(this.newCriteria());
+    this.templates.push( {
+      type: 'input',
+      hint: 'Select a criteria from dropdown on the left'
+    });
   }
 
   removeCriteria(index: number) {
@@ -77,16 +83,43 @@ export class TechnicalSearchComponent implements OnInit {
     }
   }
 
-  onOptionSelected(selection: string) {
-    console.log('Option is selected' + selection);
-    if (selection == 'rsi') {
-      this.hint = 'Enter value for rsi eg: 30 (oversold)';
+
+  getTemplate(selection: string): any {
+    console.log('template passed ' + selection);
+
+
+    if ('default' == selection) {
+      return {
+        type: 'input',
+        hint: 'Select a criteria from dropdown on the left'
+      }
     }
+     else if ('rsi' == selection) {
+      return {
+        type: 'input',
+        hint: 'Enter value for rsi eg: 30 (oversold)'
+      }
+    }
+    else if ('ema' == selection) {
+      return {
+        type: 'select',
+        options: [
+          { id: "option1", name: "test1" },
+          { id: "option2", name: "test2" },
+        ],
+        default: 'option1'
+      }
+    }
+
   }
 
-  getPlaceHolder() {
-    return this.hint;
+  onOptionSelected(selection: string, index: number) {
+    console.log('Option is selected' + selection + " ,current index " + index);
+    this.templates[index] = this.getTemplate(selection);
   }
+
+
+
 
   // removeCriteria(criteria: string) {
   //   this.searchForm.removeControl(criteria);
