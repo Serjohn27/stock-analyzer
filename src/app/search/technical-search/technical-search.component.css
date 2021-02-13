@@ -30,6 +30,8 @@
 }
 
 #add-button {
+    font-weight: bolder;
+    width: 100px;
     border: none;
     margin-top: 24px;
     background-color: #ec407a;
@@ -48,6 +50,30 @@
 
 #add-button:hover {
     background-color: #ff77a9;
+}
+
+#search-button {
+    font-weight: bolder;
+    width: 100px;
+    margin-left: 15px;
+    border: none;
+    margin-top: 24px;
+    background-color: #00e676;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    outline: none;
+    box-shadow: 0px 2px 3px #90a4ae;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}
+
+#search-button:active {
+    box-shadow: none;
+}
+
+#search-button:hover {
+    background-color: #66ffa6;
 }
 
 .option {

@@ -15,19 +15,19 @@
             <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
         </div>
 
-        <div fxFlexOffset="2" fxFlex="10" [formGroupName]="i">
+        <div fxFlexOffset="2" fxFlex="12" [formGroupName]="i">
             <select id="sign-select" class="select-box" formControlName="expressionSelect" style="color: white;">
                 <option class="option" value="default" [selected]=true>></option>
                 <option class="option" *ngFor="let expressionOption of getExpressionOptions();let i = index"
-                    [value]="getExpressionOptions()[i].id" [selected]=true>
-                    {{getExpressionOptions()[i].name}}
+                    [value]="expressionOption.id">
+                    {{expressionOption.name}}
                 </option>
             </select>
             <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
         </div>
 
 
-        <div fxLayout="row" fxFlexOffset="2" fxFlex="40" [formGroupName]="i">
+        <div fxLayout="row" fxFlexOffset="2" fxFlex="42" [formGroupName]="i">
         
                 <input *ngIf="templates[i] && templates[i].type=='input'" id="input-box" formControlName="criteriaValue" class="select-box" type="number"
                     [placeholder]="templates[i].hint"
@@ -43,6 +43,7 @@
                 </select>
          
 
+            
             <button id="cancel-button" (click)="removeCriteria(i)">
                 <svg id="cancel-icon" height="329pt" viewBox="0 0 329.26933 329" width="329pt"
                     xmlns="http://www.w3.org/2000/svg">
@@ -50,11 +51,13 @@
                         d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" />
                 </svg>
             </button>
-
-            <button (click)="submit()">submit</button>
+         
         </div>
 
-
     </div>
-    <button id="add-button" (click)="addCriteria()">Add Criteria</button>
+    <div fxLayout="row">
+        <button id="add-button" (click)="addCriteria()">Add Criteria</button>
+        <button id="search-button" (click)="submit()">Search</button>
+    </div>
+   
 </form>
