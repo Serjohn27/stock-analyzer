@@ -111,6 +111,34 @@ export class TechnicalSearchComponent implements OnInit {
       }
     }
 
+    else if ('price' == selection) {
+      return {
+        type: 'select',
+        options: [
+          { id: "abovesma", name: "Price Above SMA (200)", default: true },
+          { id: "nearsma", name: "Price Near SMA (200)", default: false },
+          { id: "belowsma", name: "Price Below SMA (200)", default: false },
+          { id: "aboveema", name: "Price Above EMA (50)", default: true },
+          { id: "nearema", name: "Price Near EMA (50)", default: false },
+          { id: "belowema", name: "Price Below EMA (50)", default: false },
+          { id: "nearmonthlymean", name: "Price Above Monthly Mean", default: true },
+          { id: "abovemonthlymean", name: "Price Near Monthly Mean", default: false },
+          { id: "belowmonthlymean", name: "Price Below Monthly Mean", default: false },
+        ]
+      }
+    }
+
+    else if ('volume' == selection) {
+      return {
+        type: 'select',
+        options: [
+          { id: "increasing", name: "Increasing Volume", default: true },
+          { id: "decreasing", name: "Decreasing Volume", default: false },
+          { id: "unusual", name: "Unusual Volume", default: false }
+        ]
+      }
+    }
+
   }
 
   onOptionSelected(selection: string, index: number) {
@@ -120,7 +148,7 @@ export class TechnicalSearchComponent implements OnInit {
 
 
   submit() {
-     console.log(this.searchForm.value)
+     console.log(this.searchForm.value.criterias);
   }
 
 

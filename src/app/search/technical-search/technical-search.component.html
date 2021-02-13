@@ -28,22 +28,23 @@
 
 
         <div fxLayout="row" fxFlexOffset="2" fxFlex="42" [formGroupName]="i">
-        
-                <input *ngIf="templates[i] && templates[i].type=='input'" id="input-box" formControlName="criteriaValue" class="select-box" type="number"
-                    [placeholder]="templates[i].hint"
-                    [attr.disabled]="criteria.value.criteriaSelect == 'default' ? 'disabled' : null">
-         
-    
-                <select *ngIf="templates[i] && templates[i].type=='select'" id="sign-select-2" class="select-box" formControlName="criteriaValue" >
-                    <option class="defaultOption" value="default" [selected]=true [disabled]="true">Select an option below</option>
-                    <option class="option" *ngFor="let option of templates[i].options;let i = index"
-                        [value]="option.id">
-                        {{option.name}}
-                    </option>
-                </select>
-         
 
-            
+            <input *ngIf="templates[i] && templates[i].type=='input'" id="input-box" formControlName="criteriaValue"
+                class="select-box" type="number" [placeholder]="templates[i].hint"
+                [attr.disabled]="criteria.value.criteriaSelect == 'default' ? 'disabled' : null">
+
+
+            <select *ngIf="templates[i] && templates[i].type=='select'" id="sign-select-2" class="select-box"
+                formControlName="criteriaValue">
+                <option class="defaultOption" value="default" [selected]=true [disabled]="true">Select an option below
+                </option>
+                <option class="option" *ngFor="let option of templates[i].options;let i = index" [value]="option.id">
+                    {{option.name}}
+                </option>
+            </select>
+
+
+
             <button id="cancel-button" (click)="removeCriteria(i)">
                 <svg id="cancel-icon" height="329pt" viewBox="0 0 329.26933 329" width="329pt"
                     xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +52,7 @@
                         d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" />
                 </svg>
             </button>
-         
+
         </div>
 
     </div>
@@ -59,5 +60,46 @@
         <button id="add-button" (click)="addCriteria()">Add Criteria</button>
         <button id="search-button" (click)="submit()">Search</button>
     </div>
-   
+
 </form>
+
+
+
+
+<div id="results-container">
+    <div fxLayout="column">
+        <div class="results-header-container">
+            <p class="results-header">Search Results</p>
+        </div>
+        <hr style="width: 100%; border: 1px black solid;">
+        <table id="results-table">
+            <tr>
+              <th>Symbol</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Today's Change</th>
+              <th>Today's Change %</th>
+              <th>Volume</th>
+            </tr>
+            <tr>
+              <td>AMD</td>
+              <td>Advanced Micro Devices</td>
+              <td>36.36</td>
+              <td>5.22</td>
+              <td>2%</td>
+              <td>123M</td>
+            </tr>
+
+            <tr>
+                <td>AAPL</td>
+                <td>Apple</td>
+                <td>336.36</td>
+                <td>25.22</td>
+                <td>12%</td>
+                <td>550K </td>
+              </tr>
+          </table>
+          
+    </div>
+
+</div>

@@ -96,7 +96,7 @@ select.select-box {
 }
 
 select:focus {
-    border-color: gray;
+    border-color: #62757f;
     outline: none;
 }
 
@@ -127,20 +127,21 @@ select:focus {
     color: white;
 }
 
- .selectContainer {
+.selectContainer {
     margin-top: 16px;
-} 
+}
 
 /* hide numbers */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
+
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
 
 .option {
@@ -149,4 +150,51 @@ input[type=number] {
 
 .defaultOption {
     color: #62757f;
+}
+
+#results-container {
+    border-radius: 20px;
+    margin-top: 30px;
+    background-color: #1c313a;
+    height: 100%;
+    min-height: 380px;
+    width: 100%;
+}
+
+.results-header-container {
+    padding-left: 24px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.results-header {
+    font-size: 20px;
+    font-weight: bold;
+    color: #62757f;
+}
+
+#results-table {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 14px;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 2px solid #102027;
+}
+
+th {
+    padding-bottom: 20px;
+    padding-top: 10px;
+    color: #62757f;
+}
+
+td {
+    padding-bottom: 8px;
+    padding-top: 8px;
+    border-left: none;
 }
