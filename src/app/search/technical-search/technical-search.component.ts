@@ -32,11 +32,11 @@ export class TechnicalSearchComponent implements OnInit {
     };
   }
 
-  newCriteria() {
+  newCriteria(criteriaSelectDefault: string, expressionSelectDefault:string, criteriaValueDefault: string) {
     return this.formBuilder.group({
-      criteriaSelect: ['default'],
-      expressionSelect: ['default'],
-      criteriaValue: [],
+      criteriaSelect: [criteriaSelectDefault],
+      expressionSelect: [expressionSelectDefault],
+      criteriaValue: [criteriaValueDefault],
       // datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
     });
   }
@@ -69,7 +69,7 @@ export class TechnicalSearchComponent implements OnInit {
   }
 
   addCriteria() {
-    this.criterias().push(this.newCriteria());
+    this.criterias().push(this.newCriteria('default','default','default'));
     this.templates.push( {
       type: 'input',
       hint: 'Select a criteria from dropdown on the left'
@@ -104,10 +104,10 @@ export class TechnicalSearchComponent implements OnInit {
       return {
         type: 'select',
         options: [
-          { id: "option1", name: "test1" },
-          { id: "option2", name: "test2" },
-        ],
-        default: 'option1'
+          { id: "abovesma", name: "Above SMA (200)", default: true },
+          { id: "nearsma", name: "Near SMA (200)", default: false },
+          { id: "belowsma", name: "Below SMA (200)", default: false },
+        ]
       }
     }
 
@@ -116,6 +116,11 @@ export class TechnicalSearchComponent implements OnInit {
   onOptionSelected(selection: string, index: number) {
     console.log('Option is selected' + selection + " ,current index " + index);
     this.templates[index] = this.getTemplate(selection);
+  }
+
+
+  submit() {
+     console.log(this.searchForm.value)
   }
 
 

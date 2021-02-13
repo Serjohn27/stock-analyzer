@@ -11,11 +11,18 @@
     height: 50px;
     outline: none;
     background-color: #1c313a;
+    color: white;
 }
 
 #sign-select {
     font-size: 24px;
     vertical-align: middle;
+}
+
+#sign-select2 {
+    font-size: 24px;
+    vertical-align: middle;
+    color: white;
 }
 
 #input-box {
