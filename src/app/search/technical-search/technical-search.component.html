@@ -4,7 +4,8 @@
     <div formArrayName="criterias" *ngFor="let criteria of criterias().controls;let i=index" class="selectContainer">
         <div fxFlex="42" [formGroupName]="i">
             <select class="select-box" formControlName="criteriaSelect"
-                (change)="onOptionSelected($event.target.value,i)" [style.color]="!criteria.dirty?'#62757f':'white'">
+                (change)="onOptionSelected($event.target.value,i)"
+                [style.color]="!criteria.get('criteriaSelect').dirty?'#62757f':'white'">
                 <option class="defaultOption" value="default" [selected]=true [disabled]="true">Select a technical
                     indicator</option>
                 <option class="option" *ngFor="let dropdownOption of getCriteriaOptions(); let i = index"
@@ -16,14 +17,24 @@
         </div>
 
         <div fxFlexOffset="2" fxFlex="12" [formGroupName]="i">
-            <select id="sign-select" class="select-box" formControlName="expressionSelect" style="color: white;">
-                <option class="option" value="default" [selected]=true>></option>
-                <option class="option" *ngFor="let expressionOption of getExpressionOptions();let i = index"
-                    [value]="expressionOption.id">
-                    {{expressionOption.name}}
-                </option>
-            </select>
-            <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
+            <div *ngIf="templates[i].expressionSelect">
+                <select id="sign-select" class="select-box" formControlName="expressionSelect"
+                    [style.color]="!criteria.dirty?'#62757f':'white'"
+                    [style.font-size]="!criteria.get('expressionSelect').dirty ?'16px':'24px'">
+                    <option class="defaultOption" value="default" [selected]=true [disabled]=true>Select</option>
+                    <option class="option" *ngFor="let expressionOption of getExpressionOptions();let i = index"
+                        [value]="expressionOption.id">
+                        {{expressionOption.name}}
+                    </option>
+                </select>
+                <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
+            </div>
+            <div *ngIf="!templates[i].expressionSelect"
+                style="background-color: #1c313a; width: 100%;height: 100%; border-radius: 10px;">
+                <div style="color:gray;text-align: center; padding-top: 15px;">
+                    <!-- <span>Is</span> -->
+                </div>
+            </div>
         </div>
 
 
@@ -66,7 +77,46 @@
 
 
 
-<div id="results-container">
+<div *ngIf="searchResults" id="results-container">
+    <div fxLayout="column">
+        <div class="results-header-container">
+            <p class="results-header">Search Results</p>
+        </div>
+        <hr style="width: 100%; border: 1px black solid;">
+        <table id="results-table">
+
+
+            <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="50"
+                (scrolledIndexChange)="getNextBatch($event)">
+                <thead class="table-headers">
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Today's Change</th>
+                        <th>Today's Change %</th>
+                        <th>Volume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *cdkVirtualFor="let searchResult of searchResults.content">
+                        <td>{{searchResult.symbol}}</td>
+                        <td>Advanced Micro Devices</td>
+                        <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
+                        <td>{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
+                        <td>{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
+                            (searchResult.percentChange | number:'1.0-2') : "0" }}%</td>
+                        <td>{{searchResult.lastVolume | shortNumber}}</td>
+                    </tr>
+                </tbody>
+
+
+            </cdk-virtual-scroll-viewport>
+        </table>
+
+    </div>
+    <!-- 
+<div *ngIf="searchResults" id="results-container">
     <div fxLayout="column">
         <div class="results-header-container">
             <p class="results-header">Search Results</p>
@@ -74,32 +124,22 @@
         <hr style="width: 100%; border: 1px black solid;">
         <table id="results-table">
             <tr>
-              <th>Symbol</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Today's Change</th>
-              <th>Today's Change %</th>
-              <th>Volume</th>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Today's Change</th>
+                <th>Today's Change %</th>
+                <th>Volume</th>
             </tr>
-            <tr>
-              <td>AMD</td>
-              <td>Advanced Micro Devices</td>
-              <td>36.36</td>
-              <td>5.22</td>
-              <td>2%</td>
-              <td>123M</td>
+            <tr *ngFor="let searchResult of searchResults.content">
+                <td>{{searchResult.symbol}}</td>
+                <td>Advanced Micro Devices</td>
+                <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
+                <td>{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
+                <td>{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ? (searchResult.percentChange |  number:'1.0-2') : "0" }}%</td>
+                <td>{{searchResult.lastVolume | shortNumber}}</td>
             </tr>
 
-            <tr>
-                <td>AAPL</td>
-                <td>Apple</td>
-                <td>336.36</td>
-                <td>25.22</td>
-                <td>12%</td>
-                <td>550K </td>
-              </tr>
-          </table>
-          
-    </div>
-
-</div>
+         
+        </table>
+</div>  -->

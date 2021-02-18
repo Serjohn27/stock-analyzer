@@ -1,6 +1,8 @@
-import {  Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { Page } from 'src/app/common/models/page';
+import { TechnicalSearchService } from './technical-search.service';
 
 @Component({
   selector: 'app-technical-search',
@@ -15,9 +17,9 @@ export class TechnicalSearchComponent implements OnInit {
   hints: string[] = [];
   templates: any[] = [];
 
+  searchResults: Page;
 
-
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private searchService: TechnicalSearchService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
 
@@ -32,7 +34,7 @@ export class TechnicalSearchComponent implements OnInit {
     };
   }
 
-  newCriteria(criteriaSelectDefault: string, expressionSelectDefault:string, criteriaValueDefault: string) {
+  newCriteria(criteriaSelectDefault: string, expressionSelectDefault: string, criteriaValueDefault: string) {
     return this.formBuilder.group({
       criteriaSelect: [criteriaSelectDefault],
       expressionSelect: [expressionSelectDefault],
@@ -60,17 +62,17 @@ export class TechnicalSearchComponent implements OnInit {
 
   getExpressionOptions(): any {
     return [
+      { id: "gt", name: ">" },
       { id: "lt", name: "<" },
       { id: "eq", name: "=" },
       { id: "lte", name: "<=" },
-      { id: "gte", name: ">=" },
-      { id: "gt", name: ">" },
+      { id: "gte", name: ">=" }
     ]
   }
 
   addCriteria() {
-    this.criterias().push(this.newCriteria('default','default','default'));
-    this.templates.push( {
+    this.criterias().push(this.newCriteria('default', 'default', 'default'));
+    this.templates.push({
       type: 'input',
       hint: 'Select a criteria from dropdown on the left'
     });
@@ -87,17 +89,18 @@ export class TechnicalSearchComponent implements OnInit {
   getTemplate(selection: string): any {
     console.log('template passed ' + selection);
 
-
     if ('default' == selection) {
       return {
         type: 'input',
-        hint: 'Select a criteria from dropdown on the left'
+        hint: 'Select a criteria from dropdown on the left',
+        expressionSelect: true
       }
     }
-     else if ('rsi' == selection) {
+    else if ('rsi' == selection) {
       return {
         type: 'input',
-        hint: 'Enter value for rsi eg: 30 (oversold)'
+        hint: 'Enter value for rsi eg: 30 (oversold)',
+        expressionSelect: true
       }
     }
     else if ('ema' == selection) {
@@ -107,10 +110,10 @@ export class TechnicalSearchComponent implements OnInit {
           { id: "abovesma", name: "Above SMA (200)", default: true },
           { id: "nearsma", name: "Near SMA (200)", default: false },
           { id: "belowsma", name: "Below SMA (200)", default: false },
-        ]
+        ],
+        expressionSelect: false
       }
     }
-
     else if ('price' == selection) {
       return {
         type: 'select',
@@ -124,7 +127,8 @@ export class TechnicalSearchComponent implements OnInit {
           { id: "nearmonthlymean", name: "Price Above Monthly Mean", default: true },
           { id: "abovemonthlymean", name: "Price Near Monthly Mean", default: false },
           { id: "belowmonthlymean", name: "Price Below Monthly Mean", default: false },
-        ]
+        ],
+        expressionSelect: false
       }
     }
 
@@ -135,7 +139,8 @@ export class TechnicalSearchComponent implements OnInit {
           { id: "increasing", name: "Increasing Volume", default: true },
           { id: "decreasing", name: "Decreasing Volume", default: false },
           { id: "unusual", name: "Unusual Volume", default: false }
-        ]
+        ],
+        expressionSelect: false
       }
     }
 
@@ -146,13 +151,47 @@ export class TechnicalSearchComponent implements OnInit {
     this.templates[index] = this.getTemplate(selection);
   }
 
+  isNotANumber(value: any) {
+    return typeof value !== "string"
+ }
+
 
   submit() {
-     console.log(this.searchForm.value.criterias);
+    console.log(this.searchForm.value.criterias);
+    const criterias = this.searchForm.value.criterias;
+
+    let searchParams: any = {};
+
+    for (let criteria of criterias) {
+      console.log('Criteria ' + JSON.stringify(criteria));
+      let criteriaSelect = criteria.criteriaSelect;
+      let expressionSelect = criteria.expressionSelect;
+
+      if (expressionSelect == 'default') {
+        if (criteria.criteriaValue == 'abovesma') {
+          searchParams[criteriaSelect] = 'gt:two_hundred_sma';
+        }
+        else if (criteria.criteriaValue == 'belowsma') {
+          searchParams[criteriaSelect] = 'lt:two_hundred_sma';
+        }
+        else if (criteria.criteriaValue == 'nearsma') {
+          searchParams[criteriaSelect] = 'nr:two_hundred_sma';
+        }
+      }
+      else {
+        searchParams[criteriaSelect] = criteria.expressionSelect + ':' + criteria.criteriaValue;
+      }
+
+    }
+    searchParams.date = '2021-02-12'
+    console.log('Criterias  ' + JSON.stringify(searchParams));
+    this.searchService.search(searchParams).subscribe(data => this.searchResults = data);
   }
 
 
-
+getNextBatch(event: any) {
+   console.log('scrolled ' + event);
+}
 
   // removeCriteria(criteria: string) {
   //   this.searchForm.removeControl(criteria);
