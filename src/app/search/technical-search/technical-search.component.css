@@ -155,6 +155,11 @@ input[type=number] {
     color: #62757f;
 }
 
+
+
+
+/* Results Table Styles */
+
 #results-container {
     border-radius: 20px;
     margin-top: 30px;
@@ -181,13 +186,7 @@ input[type=number] {
     padding-bottom: 8px;
     font-size: 14px;
     border-collapse: collapse;
-    width: 100%;
-}
-
-
-#results-table thead tr th{
-    position: sticky;
-    top: 0;
+    width: 100%;    
 }
 
 
@@ -202,24 +201,31 @@ th {
     padding-bottom: 20px;
     padding-top: 10px;
     color: #62757f;
-    width: 90vw;
+    
 }
 
-td {
+ td {
     padding-bottom: 8px;
     padding-top: 8px;
     border-left: none;
-    width: 100vw; /* infinite scrolling */
+      width: 93vw;   
 }
 
 
 /* infinite scrolling */
 cdk-virtual-scroll-viewport {
     height: 70vh;
-    width: 90vw;
     margin: 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    width: 100%;
 }
+
+
+
+
+thead.table-headers th {
+    background: #1c313a;
+    position: sticky;
+    top: 0; /* Don't forget this, required for the stickiness */
+}
+
 

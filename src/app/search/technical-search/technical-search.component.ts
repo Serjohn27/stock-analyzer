@@ -183,7 +183,7 @@ export class TechnicalSearchComponent implements OnInit {
       }
 
     }
-    searchParams.date = '2021-02-12'
+    searchParams.date = '2021-02-18'
     console.log('Criterias  ' + JSON.stringify(searchParams));
     this.searchService.search(searchParams).subscribe(data => this.searchResults = data);
   }

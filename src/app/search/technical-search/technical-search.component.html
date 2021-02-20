@@ -83,36 +83,45 @@
             <p class="results-header">Search Results</p>
         </div>
         <hr style="width: 100%; border: 1px black solid;">
+
+
+
+
         <table id="results-table">
+            <div fxLayout="column " style="width: 100%;">
+                <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="1"
+                    (scrolledIndexChange)="getNextBatch($event)">
 
+                    <thead style="width: 100%">
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Today's Change</th>
+                            <th>Today's Change %</th>
+                            <th>Volume</th>
+                            <th>Volume1</th>
+                            <th>Volume2</th>
+                        </tr>
+                    </thead>
+                    <tbody  style="width: 100%">
+                        <tr *cdkVirtualFor="let searchResult of searchResults.content">
+                            <td>{{searchResult.symbol}}</td>
+                            <td>Advanced Micro Devices</td>
+                            <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
+                            <td>{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
+                            <td>{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
+                                (searchResult.percentChange | number:'1.0-2') : "0" }}%</td>
+                            <td>{{searchResult.lastVolume | shortNumber}}</td>
+                            <td>{{searchResult.lastVolume | shortNumber}}</td>
+                            <td>{{searchResult.lastVolume | shortNumber}}</td>
+                        </tr>
+                    </tbody>
 
-            <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="50"
-                (scrolledIndexChange)="getNextBatch($event)">
-                <thead class="table-headers">
-                    <tr>
-                        <th>Symbol</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Today's Change</th>
-                        <th>Today's Change %</th>
-                        <th>Volume</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *cdkVirtualFor="let searchResult of searchResults.content">
-                        <td>{{searchResult.symbol}}</td>
-                        <td>Advanced Micro Devices</td>
-                        <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
-                        <td>{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
-                        <td>{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
-                            (searchResult.percentChange | number:'1.0-2') : "0" }}%</td>
-                        <td>{{searchResult.lastVolume | shortNumber}}</td>
-                    </tr>
-                </tbody>
-
-
-            </cdk-virtual-scroll-viewport>
+                </cdk-virtual-scroll-viewport>
+            </div>
         </table>
+
 
     </div>
     <!-- 
