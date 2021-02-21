@@ -88,11 +88,10 @@
 
 
         <table id="results-table">
-            <div fxLayout="column " style="width: 100%;">
+            <div fxLayout="column ">
                 <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="1"
                     (scrolledIndexChange)="getNextBatch($event)">
-
-                    <thead style="width: 100%">
+                    <thead>
                         <tr>
                             <th>Symbol</th>
                             <th>Name</th>
@@ -100,24 +99,20 @@
                             <th>Today's Change</th>
                             <th>Today's Change %</th>
                             <th>Volume</th>
-                            <th>Volume1</th>
-                            <th>Volume2</th>
+
                         </tr>
                     </thead>
-                    <tbody  style="width: 100%">
+                    <tbody>
                         <tr *cdkVirtualFor="let searchResult of searchResults.content">
                             <td>{{searchResult.symbol}}</td>
                             <td>Advanced Micro Devices</td>
                             <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
-                            <td>{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
-                            <td>{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
+                            <td [style.color]="searchResult.technicals.daily_price_difference>0?'#32cb00':'#ff3d00'">{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
+                            <td [style.color]="searchResult.percentChange>0?'#32cb00':'#ff3d00'">{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
                                 (searchResult.percentChange | number:'1.0-2') : "0" }}%</td>
-                            <td>{{searchResult.lastVolume | shortNumber}}</td>
-                            <td>{{searchResult.lastVolume | shortNumber}}</td>
                             <td>{{searchResult.lastVolume | shortNumber}}</td>
                         </tr>
                     </tbody>
-
                 </cdk-virtual-scroll-viewport>
             </div>
         </table>
