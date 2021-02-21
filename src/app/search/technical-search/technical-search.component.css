@@ -201,6 +201,7 @@ th {
     padding-bottom: 20px;
     padding-top: 10px;
     color: #62757f;
+    width: 93vw;  
     
 }
 
@@ -208,7 +209,7 @@ th {
     padding-bottom: 8px;
     padding-top: 8px;
     border-left: none;
-      width: 93vw;   
+    width: 93vw;   
 }
 
 

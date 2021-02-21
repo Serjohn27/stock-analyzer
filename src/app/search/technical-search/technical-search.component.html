@@ -89,26 +89,29 @@
 
         <table id="results-table">
             <div fxLayout="column ">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Today's Change</th>
+                        <th>Today's Change %</th>
+                        <th>Volume</th>
+
+                    </tr>
+                </thead>
                 <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="1"
                     (scrolledIndexChange)="getNextBatch($event)">
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Today's Change</th>
-                            <th>Today's Change %</th>
-                            <th>Volume</th>
 
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr *cdkVirtualFor="let searchResult of searchResults.content">
                             <td>{{searchResult.symbol}}</td>
                             <td>Advanced Micro Devices</td>
                             <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
-                            <td [style.color]="searchResult.technicals.daily_price_difference>0?'#32cb00':'#ff3d00'">{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
-                            <td [style.color]="searchResult.percentChange>0?'#32cb00':'#ff3d00'">{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
+                            <td [style.color]="searchResult.technicals.daily_price_difference>0?'#32cb00':'#ff3d00'">
+                                {{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
+                            <td [style.color]="searchResult.percentChange>0?'#32cb00':'#ff3d00'">{{
+                                (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
                                 (searchResult.percentChange | number:'1.0-2') : "0" }}%</td>
                             <td>{{searchResult.lastVolume | shortNumber}}</td>
                         </tr>
@@ -119,31 +122,3 @@
 
 
     </div>
-    <!-- 
-<div *ngIf="searchResults" id="results-container">
-    <div fxLayout="column">
-        <div class="results-header-container">
-            <p class="results-header">Search Results</p>
-        </div>
-        <hr style="width: 100%; border: 1px black solid;">
-        <table id="results-table">
-            <tr>
-                <th>Symbol</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Today's Change</th>
-                <th>Today's Change %</th>
-                <th>Volume</th>
-            </tr>
-            <tr *ngFor="let searchResult of searchResults.content">
-                <td>{{searchResult.symbol}}</td>
-                <td>Advanced Micro Devices</td>
-                <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
-                <td>{{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
-                <td>{{ (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ? (searchResult.percentChange |  number:'1.0-2') : "0" }}%</td>
-                <td>{{searchResult.lastVolume | shortNumber}}</td>
-            </tr>
-
-         
-        </table>
-</div>  -->
