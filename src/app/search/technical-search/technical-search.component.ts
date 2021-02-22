@@ -153,7 +153,7 @@ export class TechnicalSearchComponent implements OnInit {
 
   isNotANumber(value: any) {
     return typeof value !== "string"
- }
+  }
 
 
   submit() {
@@ -189,13 +189,9 @@ export class TechnicalSearchComponent implements OnInit {
   }
 
 
-getNextBatch(event: any) {
-   console.log('scrolled ' + event);
-}
+  getNextBatch(event: any) {
+    console.log('scrolled ' + event);
+  }
 
-  // removeCriteria(criteria: string) {
-  //   this.searchForm.removeControl(criteria);
-  //   this.searchForm.get('criteriaValue').setValue('Enter a value now');
-  // }
 
 }
