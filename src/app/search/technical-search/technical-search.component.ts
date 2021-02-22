@@ -71,7 +71,7 @@ export class TechnicalSearchComponent implements OnInit {
   }
 
   addCriteria() {
-    this.criterias().push(this.newCriteria('default', 'default', 'default'));
+    this.criterias().push(this.newCriteria(null, null, null));
     this.templates.push({
       type: 'input',
       hint: 'Select a criteria from dropdown on the left'
@@ -89,7 +89,7 @@ export class TechnicalSearchComponent implements OnInit {
   getTemplate(selection: string): any {
     console.log('template passed ' + selection);
 
-    if ('default' == selection) {
+    if (null == selection) {
       return {
         type: 'input',
         hint: 'Select a criteria from dropdown on the left',

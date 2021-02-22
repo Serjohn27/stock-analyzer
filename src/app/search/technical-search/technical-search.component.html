@@ -6,7 +6,7 @@
             <select class="select-box" formControlName="criteriaSelect"
                 (change)="onOptionSelected($event.target.value,i)"
                 [style.color]="!criteria.get('criteriaSelect').dirty?'#62757f':'white'">
-                <option class="defaultOption" value="default" [selected]=true [disabled]="true">Select a technical
+                <option class="defaultOption" [ngValue]=null [selected]=true [disabled]="true">Select a technical
                     indicator</option>
                 <option class="option" *ngFor="let dropdownOption of getCriteriaOptions(); let i = index"
                     [value]="getCriteriaOptions()[i].id">
@@ -21,7 +21,7 @@
                 <select id="sign-select" class="select-box" formControlName="expressionSelect"
                     [style.color]="!criteria.dirty?'#62757f':'white'"
                     [style.font-size]="!criteria.get('expressionSelect').dirty ?'16px':'24px'">
-                    <option class="defaultOption" value="default" [selected]=true [disabled]=true>Select</option>
+                    <option class="defaultOption" [ngValue]=null [selected]=true [disabled]=true>Select</option>
                     <option class="option" *ngFor="let expressionOption of getExpressionOptions();let i = index"
                         [value]="expressionOption.id">
                         {{expressionOption.name}}
@@ -42,12 +42,12 @@
 
             <input *ngIf="templates[i] && templates[i].type=='input'" id="input-box" formControlName="criteriaValue"
                 class="select-box" type="number" [placeholder]="templates[i].hint"
-                [attr.disabled]="criteria.value.criteriaSelect == 'default' ? 'disabled' : null">
+                [attr.disabled]="criteria.value.criteriaSelect == null ? 'disabled' : null">
 
 
             <select *ngIf="templates[i] && templates[i].type=='select'" id="sign-select-2" class="select-box"
                 formControlName="criteriaValue">
-                <option class="defaultOption" value="default" [selected]=true [disabled]="true">Select an option below
+                <option class="defaultOption" [ngValue]=null [selected]=true [disabled]="true">Select an option below
                 </option>
                 <option class="option" *ngFor="let option of templates[i].options;let i = index" [value]="option.id">
                     {{option.name}}
