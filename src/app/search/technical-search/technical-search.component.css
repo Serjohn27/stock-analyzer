@@ -253,6 +253,8 @@ thead.table-headers th {
   
   
   
-  
+  .error {
+      border: 1px solid red;
+  }
 
 

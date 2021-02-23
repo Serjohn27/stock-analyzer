@@ -3,7 +3,7 @@
 
     <div formArrayName="criterias" *ngFor="let criteria of criterias().controls;let i=index" class="selectContainer">
         <div fxFlex="42" [formGroupName]="i">
-            <select class="select-box" formControlName="criteriaSelect"
+            <select [ngClass]="{'error': criteria.get('criteriaSelect').value=='' ||criteria.get('criteriaSelect').value==null && this.criteriaAdded}"     class="select-box" formControlName="criteriaSelect"
                 (change)="onOptionSelected($event.target.value,i)"
                 [style.color]="!criteria.get('criteriaSelect').dirty?'#62757f':'white'">
                 <option class="defaultOption" [ngValue]=null [selected]=true [disabled]="true">Select a technical
@@ -18,7 +18,7 @@
 
         <div fxFlexOffset="2" fxFlex="12" [formGroupName]="i">
             <div *ngIf="templates[i].expressionSelect">
-                <select id="sign-select" class="select-box" formControlName="expressionSelect"
+                <select [ngClass]="{'error': criteria.get('expressionSelect').value=='' ||criteria.get('expressionSelect').value==null && this.criteriaAdded}"  id="sign-select" class="select-box" formControlName="expressionSelect"
                     [style.color]="!criteria.get('expressionSelect').dirty?'#62757f':'white'"
                     [style.font-size]="!criteria.get('expressionSelect').dirty ?'16px':'24px'">
                     <option class="defaultOption" [ngValue]=null [selected]=true [disabled]=true>Select</option>
@@ -40,7 +40,7 @@
 
         <div fxLayout="row" fxFlexOffset="2" fxFlex="42" [formGroupName]="i">
 
-            <input *ngIf="templates[i] && templates[i].type=='input'" id="input-box" formControlName="criteriaValue"
+            <input [ngClass]="{'error': criteria.get('criteriaValue').value=='' ||criteria.get('criteriaValue').value==null && this.criteriaAdded}" *ngIf="templates[i] && templates[i].type=='input'" id="input-box" formControlName="criteriaValue"
                 class="select-box" type="number" [placeholder]="templates[i].hint"
                 [attr.disabled]="criteria.value.criteriaSelect == null ? 'disabled' : null">
 

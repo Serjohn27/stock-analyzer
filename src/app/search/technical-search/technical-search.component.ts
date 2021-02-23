@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { Page } from 'src/app/common/models/page';
 import { TechnicalSearchService } from './technical-search.service';
@@ -10,6 +10,8 @@ import { TechnicalSearchService } from './technical-search.service';
   styleUrls: ['./technical-search.component.css']
 })
 export class TechnicalSearchComponent implements OnInit {
+
+  criteriaAdded: boolean = false;
 
   searchForm: FormGroup;
   faChevronDown = faChevronDown;
@@ -27,7 +29,11 @@ export class TechnicalSearchComponent implements OnInit {
       name: '',
       criterias: this.formBuilder.array([])
     });
-    this.addCriteria();
+    this.criterias().push(this.newCriteria(null, null, null));
+    this.templates.push({
+      type: 'input',
+      hint: 'Select a criteria from dropdown on the left'
+    });
     this.templates[0] = {
       type: 'input',
       hint: 'Select a criteria from dropdown on the left'
@@ -36,9 +42,9 @@ export class TechnicalSearchComponent implements OnInit {
 
   newCriteria(criteriaSelectDefault: string, expressionSelectDefault: string, criteriaValueDefault: string) {
     return this.formBuilder.group({
-      criteriaSelect: [criteriaSelectDefault],
+      criteriaSelect: [criteriaSelectDefault,Validators.required],
       expressionSelect: [expressionSelectDefault],
-      criteriaValue: [criteriaValueDefault],
+      criteriaValue: [criteriaValueDefault, Validators.required],
       // datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
     });
   }
@@ -69,22 +75,6 @@ export class TechnicalSearchComponent implements OnInit {
       { id: "gte", name: ">=" }
     ]
   }
-
-  addCriteria() {
-    this.criterias().push(this.newCriteria(null, null, null));
-    this.templates.push({
-      type: 'input',
-      hint: 'Select a criteria from dropdown on the left'
-    });
-  }
-
-  removeCriteria(index: number) {
-    // Keep the very first form
-    if (index != 0) {
-      this.criterias().removeAt(index);
-    }
-  }
-
 
   getTemplate(selection: string): any {
     console.log('template passed ' + selection);
@@ -155,6 +145,26 @@ export class TechnicalSearchComponent implements OnInit {
     return typeof value !== "string"
   }
 
+  addCriteria() {
+    this.criteriaAdded = true;
+    //this.searchForm.updateValueAndValidity();
+   
+    if(this.searchForm.valid){
+    this.criterias().push(this.newCriteria(null, null, null));
+    this.templates.push({
+      type: 'input',
+      hint: 'Select a criteria from dropdown on the left'
+    });
+  }
+ // this.criteriaAdded = false;
+  }
+
+  removeCriteria(index: number) {
+    // Keep the very first form
+    if (index != 0) {
+      this.criterias().removeAt(index);
+    }
+  }
 
   submit() {
     console.log(this.searchForm.value.criterias);
@@ -183,7 +193,7 @@ export class TechnicalSearchComponent implements OnInit {
       }
 
     }
-    searchParams.date = '2021-02-18'
+    searchParams.date = '2021-02-12'
     console.log('Criterias  ' + JSON.stringify(searchParams));
     this.searchService.search(searchParams).subscribe(data => this.searchResults = data);
   }
@@ -191,6 +201,13 @@ export class TechnicalSearchComponent implements OnInit {
 
   getNextBatch(event: any) {
     console.log('scrolled ' + event);
+  }
+
+
+ 
+  print(obj: any): boolean{
+    console.log('Obje' + JSON.stringify(obj.get('criteriaSelect').value));
+    return true;
   }
 
 
