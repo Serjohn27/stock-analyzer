@@ -42,7 +42,7 @@ export class TechnicalSearchComponent implements OnInit {
 
   newCriteria(criteriaSelectDefault: string, expressionSelectDefault: string, criteriaValueDefault: string) {
     return this.formBuilder.group({
-      criteriaSelect: [criteriaSelectDefault,Validators.required],
+      criteriaSelect: [criteriaSelectDefault, Validators.required],
       expressionSelect: [expressionSelectDefault],
       criteriaValue: [criteriaValueDefault, Validators.required],
       // datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
@@ -97,9 +97,9 @@ export class TechnicalSearchComponent implements OnInit {
       return {
         type: 'select',
         options: [
-          { id: "abovesma", name: "Above SMA (200)", default: true },
-          { id: "nearsma", name: "Near SMA (200)", default: false },
-          { id: "belowsma", name: "Below SMA (200)", default: false },
+          { id: "above__two_hundred_sma", name: "Above SMA (200)", default: true },
+          { id: "near__two_hundred_sma", name: "Near SMA (200)", default: false },
+          { id: "below__two_hundred_sma", name: "Below SMA (200)", default: false },
         ],
         expressionSelect: false
       }
@@ -108,15 +108,15 @@ export class TechnicalSearchComponent implements OnInit {
       return {
         type: 'select',
         options: [
-          { id: "abovesma", name: "Price Above SMA (200)", default: true },
-          { id: "nearsma", name: "Price Near SMA (200)", default: false },
-          { id: "belowsma", name: "Price Below SMA (200)", default: false },
-          { id: "aboveema", name: "Price Above EMA (50)", default: true },
-          { id: "nearema", name: "Price Near EMA (50)", default: false },
-          { id: "belowema", name: "Price Below EMA (50)", default: false },
-          { id: "nearmonthlymean", name: "Price Above Monthly Mean", default: true },
-          { id: "abovemonthlymean", name: "Price Near Monthly Mean", default: false },
-          { id: "belowmonthlymean", name: "Price Below Monthly Mean", default: false },
+          { id: "above__two_hundred_sma", name: "Price Above SMA (200)", default: true },
+          { id: "near__two_hundred_sma", name: "Price Near SMA (200)", default: false },
+          { id: "below__two_hundred_sma", name: "Price Below SMA (200)", default: false },
+          { id: "above__fifty_ema", name: "Price Above EMA (50)", default: true },
+          { id: "near__fifty_ema", name: "Price Near EMA (50)", default: false },
+          { id: "below__fifty_ema", name: "Price Below EMA (50)", default: false },
+          { id: "near__monthly_mean", name: "Price Above Monthly Mean", default: true },
+          { id: "above__monthly_mean", name: "Price Near Monthly Mean", default: false },
+          { id: "below__monthly_mean", name: "Price Below Monthly Mean", default: false },
         ],
         expressionSelect: false
       }
@@ -148,15 +148,15 @@ export class TechnicalSearchComponent implements OnInit {
   addCriteria() {
     this.criteriaAdded = true;
     //this.searchForm.updateValueAndValidity();
-   
-    if(this.searchForm.valid){
-    this.criterias().push(this.newCriteria(null, null, null));
-    this.templates.push({
-      type: 'input',
-      hint: 'Select a criteria from dropdown on the left'
-    });
-  }
- // this.criteriaAdded = false;
+
+    if (this.searchForm.valid) {
+      this.criterias().push(this.newCriteria(null, null, null));
+      this.templates.push({
+        type: 'input',
+        hint: 'Select a criteria from dropdown on the left'
+      });
+    }
+    // this.criteriaAdded = false;
   }
 
   removeCriteria(index: number) {
@@ -172,30 +172,36 @@ export class TechnicalSearchComponent implements OnInit {
 
     let searchParams: any = {};
 
-    for (let criteria of criterias) {
-      console.log('Criteria ' + JSON.stringify(criteria));
-      let criteriaSelect = criteria.criteriaSelect;
-      let expressionSelect = criteria.expressionSelect;
+    if (this.searchForm.valid) {
 
-      if (expressionSelect == 'default') {
-        if (criteria.criteriaValue == 'abovesma') {
-          searchParams[criteriaSelect] = 'gt:two_hundred_sma';
-        }
-        else if (criteria.criteriaValue == 'belowsma') {
-          searchParams[criteriaSelect] = 'lt:two_hundred_sma';
-        }
-        else if (criteria.criteriaValue == 'nearsma') {
-          searchParams[criteriaSelect] = 'nr:two_hundred_sma';
-        }
-      }
-      else {
-        searchParams[criteriaSelect] = criteria.expressionSelect + ':' + criteria.criteriaValue;
-      }
+      for (let criteria of criterias) {
+        console.log('Criteria ' + JSON.stringify(criteria));
+        let criteriaSelect = criteria.criteriaSelect;
+        let expressionSelect = criteria.expressionSelect;
 
+        if (expressionSelect == 'default') {
+          if (criteria.criteriaValue == 'abovesma') {
+            searchParams[criteriaSelect] = 'gt:two_hundred_sma';
+          }
+          else if (criteria.criteriaValue == 'belowsma') {
+            searchParams[criteriaSelect] = 'lt:two_hundred_sma';
+          }
+          else if (criteria.criteriaValue == 'nearsma') {
+            searchParams[criteriaSelect] = 'nr:two_hundred_sma';
+          }
+        }
+        else {
+          searchParams[criteriaSelect] = criteria.expressionSelect + ':' + criteria.criteriaValue;
+        }
+
+      }
+      searchParams.date = '2021-02-19'
+      console.log('Criterias  ' + JSON.stringify(searchParams));
+      this.searchService.search(searchParams).subscribe(data => this.searchResults = data);
     }
-    searchParams.date = '2021-02-12'
-    console.log('Criterias  ' + JSON.stringify(searchParams));
-    this.searchService.search(searchParams).subscribe(data => this.searchResults = data);
+    else {
+      console.log('Form invalid ')
+    }
   }
 
 
@@ -204,8 +210,8 @@ export class TechnicalSearchComponent implements OnInit {
   }
 
 
- 
-  print(obj: any): boolean{
+
+  print(obj: any): boolean {
     console.log('Obje' + JSON.stringify(obj.get('criteriaSelect').value));
     return true;
   }

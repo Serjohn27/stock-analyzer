@@ -45,7 +45,7 @@
                 [attr.disabled]="criteria.value.criteriaSelect == null ? 'disabled' : null">
 
 
-            <select *ngIf="templates[i] && templates[i].type=='select'" id="sign-select-2" class="select-box"
+            <select [ngClass]="{'error': criteria.get('criteriaValue').value=='' ||criteria.get('criteriaValue').value==null && this.criteriaAdded}" *ngIf="templates[i] && templates[i].type=='select'" id="sign-select-2" class="select-box"
                 formControlName="criteriaValue" style="color:#62757f" [style.color]="!criteria.get('criteriaValue').dirty?'#62757f':'white'">
                 <option class="defaultOption" [ngValue]=null [selected]=true [disabled]="true" >Select an option below</option>
                 <option class="option" *ngFor="let option of templates[i].options;let i = index" [value]="option.id">
