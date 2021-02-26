@@ -52,6 +52,28 @@ export class TechnicalSearchComponent implements OnInit {
     });
   }
 
+  addCriteria() {
+    this.criteriaAdded = true;
+
+    //this.searchForm.updateValueAndValidity();
+
+    if (this.searchForm.valid) {
+      this.criterias().push(this.newCriteria(null, null, null));
+      this.templates.push({
+        type: 'input',
+        hint: 'Select a criteria from dropdown on the left'
+      });
+    }
+    // this.criteriaAdded = false;
+  }
+
+  removeCriteria(index: number) {
+    // Keep the very first form
+    if (index != 0) {
+      this.criterias().removeAt(index);
+    }
+  }
+
   criterias(): FormArray {
     return this.searchForm.get("criterias") as FormArray;
   }
@@ -64,7 +86,7 @@ export class TechnicalSearchComponent implements OnInit {
       { id: 'pricerange', name: 'Price Range' },
       { id: 'volume', name: 'Volume' },
       { id: 'volumerange', name: 'Volume Range' }
-      
+
       // { id: 'float', name: 'Float' },
       // { id: 'marketcap', name: 'Market Cap' }
     ];
@@ -145,6 +167,13 @@ export class TechnicalSearchComponent implements OnInit {
       }
     }
 
+    else if ('volumerange' == selection) {
+      return {
+        type: 'range',
+        expressionSelect: false
+      }
+    }
+
   }
 
   onOptionSelected(selection: string, index: number) {
@@ -156,58 +185,55 @@ export class TechnicalSearchComponent implements OnInit {
     return typeof value !== "string"
   }
 
-  addCriteria() {
-    this.criteriaAdded = true;
-    //this.searchForm.updateValueAndValidity();
 
-    if (this.searchForm.valid) {
-      this.criterias().push(this.newCriteria(null, null, null));
-      this.templates.push({
-        type: 'input',
-        hint: 'Select a criteria from dropdown on the left'
-      });
-    }
-    // this.criteriaAdded = false;
-  }
-
-  removeCriteria(index: number) {
-    // Keep the very first form
-    if (index != 0) {
-      this.criterias().removeAt(index);
-    }
-  }
 
   submit() {
     console.log(this.searchForm.value);
     console.log(this.searchForm.value.criterias);
     const criterias = this.searchForm.value.criterias;
 
+
+
+    for (let i = 0; i < criterias.length; i++) {
+      console.log('Control ' + JSON.stringify(criterias[i]['rangeMin']));
+      if (criterias[i]['rangeMin'] != null && criterias[i]['rangeMax'] != null && criterias[i]['criteriaValue'] == null) {
+        console.log('range is passed ');
+        console.log('value ' + this.criterias().at(i).get('criteriaValue').patchValue('isRange'));
+        console.log('updated to  ' + this.criterias().at(i).get('criteriaValue').value);
+      }
+    }
+
     let searchParams: any = {};
 
     if (this.searchForm.valid) {
+      for (let i = 0; i < criterias.length; i++) {
 
-      for (let criteria of criterias) {
-        console.log('Criteria ' + JSON.stringify(criteria));
-        let criteriaSelect = criteria.criteriaSelect;
-        let expressionSelect = criteria.expressionSelect;
+        console.log('Criteria ' + JSON.stringify(criterias[i]));
+        let criteriaSelect = criterias[i].criteriaSelect;
+        let expressionSelect = criterias[i].expressionSelect;
         if (expressionSelect == null) {
-          if (criteria.criteriaValue == 'above__two_hundred_sma') {
+          if (this.criterias().at(i).get('criteriaValue').value == 'isRange') {
+            let rangeMin = this.criterias().at(i).get('rangeMin').value;
+            let rangeMax = this.criterias().at(i).get('rangeMax').value;
+            searchParams[criteriaSelect] = 'gt:' + rangeMin + '*lt:' + rangeMax;
+          }
+          else if (criterias[i].criteriaValue == 'above__two_hundred_sma') {
             searchParams[criteriaSelect] = 'gt:two_hundred_sma';
           }
-          else if (criteria.criteriaValue == 'below__two_hundred_sma') {
+          else if (criterias[i].criteriaValue == 'below__two_hundred_sma') {
             searchParams[criteriaSelect] = 'lt:two_hundred_sma';
           }
-          else if (criteria.criteriaValue == 'near__two_hundred_sma') {
+          else if (criterias[i].criteriaValue == 'near__two_hundred_sma') {
             searchParams[criteriaSelect] = 'nr:two_hundred_sma';
           }
-          else { searchParams[criteriaSelect] = criteria.criteriaValue }
+          else { searchParams[criteriaSelect] = criterias[i].criteriaValue }
         }
         else {
-          searchParams[criteriaSelect] = criteria.expressionSelect + ':' + criteria.criteriaValue;
+          searchParams[criteriaSelect] = criterias[i].expressionSelect + ':' + criterias[i].criteriaValue;
         }
 
       }
-      searchParams.date = '2021-02-12'
+      searchParams.date = '2021-02-23'
       console.log('Criterias  ' + JSON.stringify(searchParams));
       /** spinner starts on init */
 

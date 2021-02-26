@@ -62,10 +62,10 @@
             </select>
 
             <div class="rangeInputContainer" fxLayout="row" fxLayoutAlign="space-between" *ngIf="templates[i] && templates[i].type=='range'">
-                <input *ngIf="templates[i] && templates[i].type=='range'" id="range-min" formControlName="criteriaValue"
+                <input *ngIf="templates[i] && templates[i].type=='range'" id="range-min" formControlName="rangeMin"
                     class="range" type="number" placeholder="Enter Min Value">
                     <span style="padding-top:15px;">and</span>
-                <input *ngIf="templates[i] && templates[i].type=='range'" id="range-max" formControlName="criteriaValue"
+                <input *ngIf="templates[i] && templates[i].type=='range'" id="range-max" formControlName="rangeMax"
                     class="range" type="number" placeholder="Enter Max Value">
             </div>
 
@@ -100,8 +100,8 @@
 
 
 
-        <span *ngIf="!searchResult" style="text-align: center; padding: 20px; color: grey; font-style: italic;">No results found..</span>
-        <table id="results-table" *ngIf="searchResult">
+         <span *ngIf="searchResults==null || searchResults.content.length==0" style="text-align: center; padding: 20px; color: grey; font-style: italic;">No results found..</span> 
+        <table id="results-table" *ngIf="searchResults!=null&& searchResults.content.length!=0">
             <div fxLayout="column ">
                 <thead>
                     <tr>
