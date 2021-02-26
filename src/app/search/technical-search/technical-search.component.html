@@ -100,8 +100,8 @@
 
 
 
-
-        <table id="results-table">
+        <span *ngIf="!searchResult" style="text-align: center; padding: 20px; color: grey; font-style: italic;">No results found..</span>
+        <table id="results-table" *ngIf="searchResult">
             <div fxLayout="column ">
                 <thead>
                     <tr>
@@ -111,7 +111,6 @@
                         <th>Today's Change</th>
                         <th>Today's Change %</th>
                         <th>Volume</th>
-
                     </tr>
                 </thead>
                 <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="1"
