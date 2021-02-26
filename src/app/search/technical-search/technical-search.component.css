@@ -257,4 +257,19 @@ thead.table-headers th {
       border: 1px solid red;
   }
 
+  .range {
+      width: 35%;
+      border: 0px;
+      padding: 10px 6px 10px 24px;
+      border-radius: 10px;
+      height: 50px;
+      outline: none;
+      background-color: #1c313a;
+      color: white;
+  }
+
+  .rangeInputContainer {
+      width: 100%;
+  }
+
 
