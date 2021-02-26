@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { debounceTime } from 'rxjs/operators';
 import { Page } from 'src/app/common/models/page';
 import { TechnicalSearchService } from './technical-search.service';
 
@@ -27,7 +28,7 @@ export class TechnicalSearchComponent implements OnInit {
 
     this.searchForm = this.formBuilder.group({
       name: '',
-      criterias: this.formBuilder.array([])
+      criterias: this.formBuilder.array([]),
     });
     this.criterias().push(this.newCriteria(null, null, null));
     this.templates.push({
@@ -45,6 +46,8 @@ export class TechnicalSearchComponent implements OnInit {
       criteriaSelect: [criteriaSelectDefault, Validators.required],
       expressionSelect: [expressionSelectDefault],
       criteriaValue: [criteriaValueDefault, Validators.required],
+      rangeMin: [],
+      rangeMax: []
       // datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
     });
   }
@@ -60,9 +63,10 @@ export class TechnicalSearchComponent implements OnInit {
       { id: 'price', name: 'Price' },
       { id: 'pricerange', name: 'Price Range' },
       { id: 'volume', name: 'Volume' },
-      { id: 'volumerange', name: 'Volume Range' },
-      { id: 'float', name: 'Float' },
-      { id: 'marketcap', name: 'Market Cap' }
+      { id: 'volumerange', name: 'Volume Range' }
+      
+      // { id: 'float', name: 'Float' },
+      // { id: 'marketcap', name: 'Market Cap' }
     ];
   }
 
@@ -134,6 +138,13 @@ export class TechnicalSearchComponent implements OnInit {
       }
     }
 
+    else if ('pricerange' == selection) {
+      return {
+        type: 'range',
+        expressionSelect: false
+      }
+    }
+
   }
 
   onOptionSelected(selection: string, index: number) {
@@ -167,6 +178,7 @@ export class TechnicalSearchComponent implements OnInit {
   }
 
   submit() {
+    console.log(this.searchForm.value);
     console.log(this.searchForm.value.criterias);
     const criterias = this.searchForm.value.criterias;
 
@@ -178,17 +190,18 @@ export class TechnicalSearchComponent implements OnInit {
         console.log('Criteria ' + JSON.stringify(criteria));
         let criteriaSelect = criteria.criteriaSelect;
         let expressionSelect = criteria.expressionSelect;
-
-        if (expressionSelect == 'default') {
-          if (criteria.criteriaValue == 'abovesma') {
+        debugger;
+        if (expressionSelect == null) {
+          if (criteria.criteriaValue == 'above__two_hundred_sma') {
             searchParams[criteriaSelect] = 'gt:two_hundred_sma';
           }
-          else if (criteria.criteriaValue == 'belowsma') {
+          else if (criteria.criteriaValue == 'below__two_hundred_sma') {
             searchParams[criteriaSelect] = 'lt:two_hundred_sma';
           }
-          else if (criteria.criteriaValue == 'nearsma') {
+          else if (criteria.criteriaValue == 'near__two_hundred_sma') {
             searchParams[criteriaSelect] = 'nr:two_hundred_sma';
           }
+          else { searchParams[criteriaSelect] = criteria.criteriaValue }
         }
         else {
           searchParams[criteriaSelect] = criteria.expressionSelect + ':' + criteria.criteriaValue;

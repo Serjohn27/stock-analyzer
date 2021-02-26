@@ -21,22 +21,7 @@ export class TechnicalSearchService {
     let params = new HttpParams();
     for (let key in searchCriteria) {
       let value = searchCriteria[key];
-      console.log('value ' + value);
-      const tokens = value.split(":");
-      console.log('tokens ' + tokens);
-      if(tokens[0]==null || tokens[0]=='null'){
-        const tkValue = tokens[1];
-        const tkTokens = tkValue.split('__');
-        const expression = tkTokens[0];
-        const comparedTo = tkTokens[1];
-        if(expression=='above'){
-          params = params.append(key, 'gt:'+comparedTo);
-        }
-      }
-      else {
         params = params.append(key,value);   
-      }
-      
   }
     console.log("Filter used "+params);
     return this.httpClient.get<Page>(this.endpoint,{ params: params }).pipe(catchError(this.handleError));
