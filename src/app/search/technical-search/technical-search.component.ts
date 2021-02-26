@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Page } from 'src/app/common/models/page';
 import { TechnicalSearchService } from './technical-search.service';
 
@@ -24,7 +25,6 @@ export class TechnicalSearchComponent implements OnInit {
   constructor(private searchService: TechnicalSearchService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-
     this.searchForm = this.formBuilder.group({
       name: '',
       criterias: this.formBuilder.array([])
@@ -195,9 +195,13 @@ export class TechnicalSearchComponent implements OnInit {
         }
 
       }
-      searchParams.date = '2021-02-19'
+      searchParams.date = '2021-02-12'
       console.log('Criterias  ' + JSON.stringify(searchParams));
-      this.searchService.search(searchParams).subscribe(data => this.searchResults = data);
+      /** spinner starts on init */
+
+      this.searchService.search(searchParams).subscribe(data => {
+        this.searchResults = data
+      });
     }
     else {
       console.log('Form invalid ')

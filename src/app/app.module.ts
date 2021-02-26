@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutModule } from '@angular/cdk/layout';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AppComponent } from './app.component';
@@ -14,6 +15,10 @@ import { QuoteSearchComponent } from './search/quote-search/quote-search.compone
 import { TechnicalSearchComponent } from './search/technical-search/technical-search.component';
 
 import { ShortNumberPipe } from '../app/common/pipes/short-number.pipe';
+
+import { NgxSpinnerModule } from "ngx-spinner";
+import { CustomHttpInterceptor } from './common/interceptor/custom-http-interceptor/custom-http-interceptor';
+
 
 
 @NgModule({
@@ -33,9 +38,17 @@ import { ShortNumberPipe } from '../app/common/pipes/short-number.pipe';
     FlexLayoutModule,
     LayoutModule,
     HttpClientModule,
-    ScrollingModule
+    ScrollingModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule
   ],
-  providers: [ShortNumberPipe],
-  bootstrap: [AppComponent]
+  providers: [ShortNumberPipe,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptor,
+      multi: true,
+    }],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule { }
