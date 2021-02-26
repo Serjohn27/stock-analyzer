@@ -7,11 +7,11 @@
                 [ngClass]="{'error': criteria.get('criteriaSelect').value=='' ||criteria.get('criteriaSelect').value==null && this.criteriaAdded}"
                 class="select-box" formControlName="criteriaSelect" (change)="onOptionSelected($event.target.value,i)"
                 [style.color]="!criteria.get('criteriaSelect').dirty?'#62757f':'white'">
-                <option class="defaultOption" [ngValue]=null [selected]=true [disabled]="true">Select a technical
+                <option class="defaultOption" [ngValue]=null [selected]="true" [disabled]="true">Select a technical
                     indicator</option>
                 <option class="option" *ngFor="let dropdownOption of getCriteriaOptions(); let i = index"
-                    [value]="getCriteriaOptions()[i].id">
-                    {{getCriteriaOptions()[i].name}}
+                    [value]="dropdownOption.id">
+                    {{dropdownOption.name}} 
                 </option>
             </select>
             <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
@@ -92,7 +92,6 @@
 
 
 <div *ngIf="searchResults" id="results-container">
-    <ngx-spinner></ngx-spinner>
     <div fxLayout="column">
         <div class="results-header-container">
             <p class="results-header">Search Results</p>
@@ -134,7 +133,5 @@
                 </cdk-virtual-scroll-viewport>
             </div>
         </table>
-
-
     </div>
     

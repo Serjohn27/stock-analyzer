@@ -1,3 +1,4 @@
+import { trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -5,6 +6,7 @@ import { Page } from 'src/app/common/models/page';
 import { TechnicalSearchService } from './technical-search.service';
 
 @Component({
+  animations: [trigger('', [])],  // Without this select option doesnt update on view when browseranimationmodule is used
   selector: 'app-technical-search',
   templateUrl: './technical-search.component.html',
   styleUrls: ['./technical-search.component.css']
@@ -188,7 +190,6 @@ export class TechnicalSearchComponent implements OnInit {
         console.log('Criteria ' + JSON.stringify(criteria));
         let criteriaSelect = criteria.criteriaSelect;
         let expressionSelect = criteria.expressionSelect;
-        debugger;
         if (expressionSelect == null) {
           if (criteria.criteriaValue == 'above__two_hundred_sma') {
             searchParams[criteriaSelect] = 'gt:two_hundred_sma';
