@@ -187,7 +187,7 @@ export class TechnicalSearchComponent implements OnInit {
 
 
 
-  submit() {
+  submit(pageNumber: number) {
     console.log(this.searchForm.value);
     console.log(this.searchForm.value.criterias);
     const criterias = this.searchForm.value.criterias;
@@ -195,7 +195,6 @@ export class TechnicalSearchComponent implements OnInit {
 
 
     for (let i = 0; i < criterias.length; i++) {
-      console.log('Control ' + JSON.stringify(criterias[i]['rangeMin']));
       if (criterias[i]['rangeMin'] != null && criterias[i]['rangeMax'] != null && criterias[i]['criteriaValue'] == null) {
         console.log('range is passed ');
         console.log('value ' + this.criterias().at(i).get('criteriaValue').patchValue('isRange'));
@@ -236,7 +235,8 @@ export class TechnicalSearchComponent implements OnInit {
       searchParams.date = '2021-02-23'
       console.log('Criterias  ' + JSON.stringify(searchParams));
       /** spinner starts on init */
-
+      searchParams.size ='50';
+      searchParams.page = pageNumber;
       this.searchService.search(searchParams).subscribe(data => {
         this.searchResults = data
       });
@@ -249,6 +249,16 @@ export class TechnicalSearchComponent implements OnInit {
 
   getNextBatch(event: any) {
     console.log('scrolled ' + event);
+    const totalPages = this.searchResults.totalNumberOfPages;
+    let currentPage = this.searchResults.pageNumber;
+
+    if(currentPage<totalPages){
+      currentPage = currentPage + 1;
+      this.submit(currentPage);
+    }
+    
+    console.log('There are total ' + totalPages+" pages. Current page is " +currentPage );
+
   }
 
 

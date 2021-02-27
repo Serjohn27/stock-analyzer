@@ -83,7 +83,7 @@
     </div>
     <div fxLayout="row">
         <button id="add-button" (click)="addCriteria()">Add Criteria</button>
-        <button id="search-button" (click)="submit()">Search</button>
+        <button id="search-button" (click)="submit(0)">Search</button>
     </div>
 
 </form>
@@ -113,7 +113,7 @@
                         <th>Volume</th>
                     </tr>
                 </thead>
-                <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="1"
+                <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="34" 
                     (scrolledIndexChange)="getNextBatch($event)">
 
                     <tbody>
