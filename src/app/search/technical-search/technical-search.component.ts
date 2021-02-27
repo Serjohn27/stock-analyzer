@@ -178,9 +178,9 @@ export class TechnicalSearchComponent implements OnInit {
 
   }
 
-  onOptionSelected(selection: any, index: number): void {
-    console.log('Option is selected' + selection + ' ,current index ' + index);
-    this.templates[index] = this.getTemplate(selection);
+  onOptionSelected(eventTarget: any, index: number): void {
+    console.log('Option is selected' + eventTarget.value + ' ,current index ' + index);
+    this.templates[index] = this.getTemplate(eventTarget.value);
   }
 
   isNotANumber(value: any): boolean {
