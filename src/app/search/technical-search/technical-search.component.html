@@ -119,7 +119,7 @@
                     <tbody>
                         <tr *cdkVirtualFor="let searchResult of searchResults.content">
                             <td>{{searchResult.symbol}}</td>
-                            <td>Advanced Micro Devices</td>
+                            <td>{{searchResult.fundamentals.company_name}}</td>
                             <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
                             <td [style.color]="searchResult.technicals.daily_price_difference>0?'#32cb00':'#ff3d00'">
                                 {{searchResult.technicals.daily_price_difference | number:'1.0-3'}}</td>
