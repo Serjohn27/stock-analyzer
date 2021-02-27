@@ -178,7 +178,7 @@ export class TechnicalSearchComponent implements OnInit {
 
   }
 
-  onOptionSelected(selection: string, index: number): void {
+  onOptionSelected(selection: any, index: number): void {
     console.log('Option is selected' + selection + ' ,current index ' + index);
     this.templates[index] = this.getTemplate(selection);
   }

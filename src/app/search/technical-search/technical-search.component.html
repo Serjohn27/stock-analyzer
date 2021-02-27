@@ -5,7 +5,7 @@
         <div fxFlex="42" [formGroupName]="i">
             <select
                 [ngClass]="{'error': criteria.get('criteriaSelect').value=='' ||criteria.get('criteriaSelect').value==null && this.criteriaAdded}"
-                class="select-box" formControlName="criteriaSelect" (change)="onOptionSelected($event.target.value,i)"
+                class="select-box" formControlName="criteriaSelect" (change)="onOptionSelected($event.target,i)"
                 [style.color]="!criteria.get('criteriaSelect').dirty?'#62757f':'white'">
                 <option class="defaultOption" [ngValue]=null [selected]="true" [disabled]="true">Select a technical
                     indicator</option>
