@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Page } from '../../common/models/page';
@@ -12,18 +13,20 @@ export class TechnicalSearchService {
   constructor(private httpClient: HttpClient) { }
 
 
-  search(searchCriteria: any) {
+  search(searchCriteria: any): Observable<Page> {
 
     console.log('technical-search-service- 19 : Search Criterias  ' + JSON.stringify(searchCriteria));
 
     let params = new HttpParams();
-    for (let key in searchCriteria) {
-      let value = searchCriteria[key];
-        params = params.append(key,value);   
-  }
-    console.log("Filter used "+params);
-    return this.httpClient.get<Page>(this.endpoint,{ params: params });
+    for (const key in searchCriteria) {
+      if (searchCriteria.hasOwnProperty(key)) {
+        const value = searchCriteria[key];
+        params = params.append(key, value);
+      }
+    }
+    console.log('Filter used ' + params);
+    return this.httpClient.get<Page>(this.endpoint, { params });
   }
 
-  
+
 }

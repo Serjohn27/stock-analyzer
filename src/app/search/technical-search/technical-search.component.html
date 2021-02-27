@@ -11,7 +11,7 @@
                     indicator</option>
                 <option class="option" *ngFor="let dropdownOption of getCriteriaOptions(); let i = index"
                     [value]="dropdownOption.id">
-                    {{dropdownOption.name}} 
+                    {{dropdownOption.name}}
                 </option>
             </select>
             <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
@@ -100,11 +100,12 @@
 
 
 
-         <span *ngIf="searchResults==null || searchResults.content.length==0" style="text-align: center; padding: 20px; color: grey; font-style: italic;">No results found..</span> 
+         <span *ngIf="searchResults==null || searchResults.content.length==0" style="text-align: center; padding: 20px; color: grey; font-style: italic;">No results found..</span>
         <table id="results-table" *ngIf="searchResults!=null&& searchResults.content.length!=0">
             <div fxLayout="column ">
                 <thead>
                     <tr>
+                        <th>Index</th>
                         <th>Symbol</th>
                         <th>Name</th>
                         <th>Price</th>
@@ -113,11 +114,12 @@
                         <th>Volume</th>
                     </tr>
                 </thead>
-                <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="34" 
+                <cdk-virtual-scroll-viewport *ngIf="searchResults" itemSize="32"
                     (scrolledIndexChange)="getNextBatch($event)">
 
                     <tbody>
-                        <tr *cdkVirtualFor="let searchResult of searchResults.content">
+                        <tr *cdkVirtualFor="let searchResult of searchResults.content;let i=index">
+                            <td>{{i}}</td>
                             <td>{{searchResult.symbol}}</td>
                             <td>{{searchResult.fundamentals.company_name}}</td>
                             <td>{{searchResult.lastPrice | number:'1.0-2'}}</td>
@@ -133,4 +135,3 @@
             </div>
         </table>
     </div>
-    
