@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +7,5 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class AppComponent {
   title = 'stock-analyzer';
- 
   constructor() {}
- 
 }
