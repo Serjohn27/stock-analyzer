@@ -4,4 +4,4 @@ export interface Page {
     totalNumberOfPages: number;
     totalNumberOfElements: number;
     content: any;
-} 
+}

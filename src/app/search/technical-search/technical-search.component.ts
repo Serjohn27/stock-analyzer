@@ -1,6 +1,6 @@
 import { trigger } from '@angular/animations';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { Page } from 'src/app/common/models/page';
@@ -12,7 +12,7 @@ import { TechnicalSearchService } from './technical-search.service';
   templateUrl: './technical-search.component.html',
   styleUrls: ['./technical-search.component.css']
 })
-export class TechnicalSearchComponent implements OnInit {
+export class TechnicalSearchComponent implements OnInit, AfterViewInit {
 
   criteriaAdded = false;
   searchForm: FormGroup;
@@ -25,7 +25,15 @@ export class TechnicalSearchComponent implements OnInit {
   @ViewChild(CdkVirtualScrollViewport)
   viewport: CdkVirtualScrollViewport;
 
+  @ViewChild('resultsContainer')
+  resultsContainer: ElementRef;
+
+  resultsContainerWidth = 0;
+
   constructor(private searchService: TechnicalSearchService, private formBuilder: FormBuilder) { }
+  ngAfterViewInit(): void {
+    this.resultsContainerWidth = this.resultsContainer.nativeElement.offsetWidth;
+  }
 
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({
@@ -41,6 +49,7 @@ export class TechnicalSearchComponent implements OnInit {
       type: 'input',
       hint: 'Select a criteria from dropdown on the left'
     };
+
   }
 
   newCriteria(criteriaSelectDefault: string, expressionSelectDefault: string, criteriaValueDefault: string): FormGroup {
@@ -56,8 +65,6 @@ export class TechnicalSearchComponent implements OnInit {
 
   addCriteria(): void {
     this.criteriaAdded = true;
-
-    //this.searchForm.updateValueAndValidity();
 
     if (this.searchForm.valid) {
       this.criterias().push(this.newCriteria(null, null, null));
@@ -101,7 +108,7 @@ export class TechnicalSearchComponent implements OnInit {
       { id: 'eq', name: '=' },
       { id: 'lte', name: '<='},
       { id: 'gte', name: '>='}
-    ]
+    ];
   }
 
   getTemplate(selection: string): any {
@@ -112,14 +119,14 @@ export class TechnicalSearchComponent implements OnInit {
         type: 'input',
         hint: 'Select a criteria from dropdown on the left',
         expressionSelect: true
-      }
+      };
     }
     else if ('rsi' === selection) {
       return {
         type: 'input',
         hint: 'Enter value for rsi eg: 30 (oversold)',
         expressionSelect: true
-      }
+      };
     }
     else if ('ema' === selection) {
       return {
@@ -130,7 +137,7 @@ export class TechnicalSearchComponent implements OnInit {
           { id: 'below__two_hundred_sma', name: 'Below SMA (200)', default: false },
         ],
         expressionSelect: false
-      }
+      };
     }
     else if ('price' === selection) {
       return {
@@ -147,7 +154,7 @@ export class TechnicalSearchComponent implements OnInit {
           { id: 'below__monthly_mean', name: 'Price Below Monthly Mean', default: false },
         ],
         expressionSelect: false
-      }
+      };
     }
 
     else if ('volume' === selection) {
@@ -159,7 +166,7 @@ export class TechnicalSearchComponent implements OnInit {
           { id: 'unusual', name: 'Unusual Volume', default: false }
         ],
         expressionSelect: false
-      }
+      };
     }
 
     else if ('pricerange' === selection) {
@@ -197,7 +204,7 @@ export class TechnicalSearchComponent implements OnInit {
 
 
     for (let i = 0; i < criterias.length; i++) {
-      if (criterias[i]['rangeMin'] != null && criterias[i]['rangeMax'] != null && criterias[i]['criteriaValue'] == null) {
+      if (criterias[i][`rangeMin`] != null && criterias[i][`rangeMax`] != null && criterias[i][`criteriaValue`] == null) {
         console.log('range is passed ');
         console.log('value ' + this.criterias().at(i).get('criteriaValue').patchValue('isRange'));
         console.log('updated to  ' + this.criterias().at(i).get('criteriaValue').value);
@@ -241,6 +248,7 @@ export class TechnicalSearchComponent implements OnInit {
       searchParams.page = pageNumber;
       this.searchService.search(searchParams).subscribe(data => {
         this.searchResults = data;
+        console.log('results widht ' + this.resultsContainerWidth);
       });
     }
     else {
@@ -258,7 +266,7 @@ export class TechnicalSearchComponent implements OnInit {
     const total = this.viewport.getDataLength();
     console.log('The end is ' + end);
 
-    if(currentPage < totalPages && end === total){
+    if (currentPage < totalPages && end === total){
       currentPage = currentPage + 1;
       this.submit(currentPage);
     }
