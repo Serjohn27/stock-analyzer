@@ -20,7 +20,6 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
   searchForm: FormGroup;
   faChevronDown = faChevronDown;
   filterCount = 0;
-  hints: string[] = [];
   templates: any[] = [];
   searchResults: Page;
 
@@ -307,5 +306,8 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
     return true;
   }
 
+  sortBy(field: string): void {
+    console.log('Sorting by ' + field);
+  }
 
 }

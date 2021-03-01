@@ -106,31 +106,31 @@
     <div *ngIf="searchResults!=null && searchResults.content.length!=0" fxLayout="row" class="full-width table-row table-header">
       <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
         Index
-        <button class="sort-button" type="submit"><fa-icon [icon]="faSort"></fa-icon></button>
+        <button class="sort-button" (click)="sortBy('index')"><fa-icon [icon]="faSort"></fa-icon></button>
       </div>
       <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
         Symbol
-        <button class="sort-button" type="submit"><fa-icon  [icon]="faSort"></fa-icon></button>
+        <button class="sort-button" (click)="sortBy('symbol')"><fa-icon  [icon]="faSort"></fa-icon></button>
       </div>
       <div [style.width.px]="this.resultsContainerWidth* 26 / 100">
         Name
-        <button class="sort-button" type="submit"><fa-icon [icon]="faSort"></fa-icon></button>
+        <button class="sort-button" (click)="sortBy('name')"><fa-icon [icon]="faSort"></fa-icon></button>
       </div>
       <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
         Price
-        <button class="sort-button" type="submit"><fa-icon  [icon]="faSort"></fa-icon></button>
+        <button class="sort-button" (click)="sortBy('price')"><fa-icon  [icon]="faSort"></fa-icon></button>
       </div>
       <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
         Today's Change
-        <button class="sort-button" type="submit"><fa-icon  [icon]="faSort"></fa-icon></button>
+        <button class="sort-button" (click)="sortBy('todayschange')"><fa-icon  [icon]="faSort"></fa-icon></button>
       </div>
       <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
         Today's Change %
-        <button class="sort-button" type="submit"><fa-icon [icon]="faSort"></fa-icon></button>
+        <button class="sort-button" (click)="sortBy('todayschangeper')"><fa-icon [icon]="faSort"></fa-icon></button>
       </div>
       <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
         Volume
-        <button class="sort-button" type="submit"><fa-icon  [icon]="faSort"></fa-icon></button>
+        <button class="sort-button" (click)="sortBy('volume')"><fa-icon  [icon]="faSort"></fa-icon></button>
       </div>
 
     </div>
