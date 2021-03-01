@@ -2,7 +2,7 @@ import { trigger } from '@angular/animations';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faSort } from '@fortawesome/free-solid-svg-icons';
 import { Page } from 'src/app/common/models/page';
 import { TechnicalSearchService } from './technical-search.service';
 
@@ -13,6 +13,8 @@ import { TechnicalSearchService } from './technical-search.service';
   styleUrls: ['./technical-search.component.css']
 })
 export class TechnicalSearchComponent implements OnInit, AfterViewInit {
+
+  faSort = faSort;
 
   criteriaAdded = false;
   searchForm: FormGroup;
