@@ -1,6 +1,6 @@
 import { trigger } from '@angular/animations';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { Page } from 'src/app/common/models/page';
@@ -30,7 +30,7 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
 
   resultsContainerWidth = 0;
 
-  constructor(private searchService: TechnicalSearchService, private formBuilder: FormBuilder) { }
+  constructor(private searchService: TechnicalSearchService, private formBuilder: FormBuilder, private cd: ChangeDetectorRef) { }
   ngAfterViewInit(): void {
     this.resultsContainerWidth = this.resultsContainer.nativeElement.offsetWidth;
   }
@@ -106,8 +106,8 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
       { id: 'gt', name: '>' },
       { id: 'lt', name: '<' },
       { id: 'eq', name: '=' },
-      { id: 'lte', name: '<='},
-      { id: 'gte', name: '>='}
+      { id: 'lte', name: '<=' },
+      { id: 'gte', name: '>=' }
     ];
   }
 
@@ -201,46 +201,14 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
     console.log(this.searchForm.value.criterias);
     const criterias = this.searchForm.value.criterias;
 
-
-
     for (let i = 0; i < criterias.length; i++) {
       if (criterias[i][`rangeMin`] != null && criterias[i][`rangeMax`] != null && criterias[i][`criteriaValue`] == null) {
-        console.log('range is passed ');
-        console.log('value ' + this.criterias().at(i).get('criteriaValue').patchValue('isRange'));
-        console.log('updated to  ' + this.criterias().at(i).get('criteriaValue').value);
+        this.criterias().at(i).get('criteriaValue').patchValue('isRange');
       }
     }
 
-    const searchParams: any = {};
-
     if (this.searchForm.valid) {
-      for (let i = 0; i < criterias.length; i++) {
-
-        console.log('Criteria ' + JSON.stringify(criterias[i]));
-        const criteriaSelect = criterias[i].criteriaSelect;
-        const expressionSelect = criterias[i].expressionSelect;
-        if (expressionSelect == null) {
-          if (this.criterias().at(i).get('criteriaValue').value === 'isRange') {
-            const rangeMin = this.criterias().at(i).get('rangeMin').value;
-            const rangeMax = this.criterias().at(i).get('rangeMax').value;
-            searchParams[criteriaSelect] = 'gt:' + rangeMin + '*lt:' + rangeMax;
-          }
-          else if (criterias[i].criteriaValue === 'above__two_hundred_sma') {
-            searchParams[criteriaSelect] = 'gt:two_hundred_sma';
-          }
-          else if (criterias[i].criteriaValue === 'below__two_hundred_sma') {
-            searchParams[criteriaSelect] = 'lt:two_hundred_sma';
-          }
-          else if (criterias[i].criteriaValue === 'near__two_hundred_sma') {
-            searchParams[criteriaSelect] = 'nr:two_hundred_sma';
-          }
-          else { searchParams[criteriaSelect] = criterias[i].criteriaValue; }
-        }
-        else {
-          searchParams[criteriaSelect] = criterias[i].expressionSelect + ':' + criterias[i].criteriaValue;
-        }
-
-      }
+      const searchParams = this.buildRequest(criterias);
       searchParams.date = '2021-02-12';
       console.log('Criterias  ' + JSON.stringify(searchParams));
       /** spinner starts on init */
@@ -257,21 +225,76 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
   }
 
 
+  buildRequest(criterias: FormArray): any {
+    const searchParams: any = {};
+    for (let i = 0; i < criterias.length; i++) {
+
+      console.log('Criteria ' + JSON.stringify(criterias[i]));
+      const criteriaSelect = criterias[i].criteriaSelect;
+      const expressionSelect = criterias[i].expressionSelect;
+      if (expressionSelect == null) {
+        if (this.criterias().at(i).get('criteriaValue').value === 'isRange') {
+          const rangeMin = this.criterias().at(i).get('rangeMin').value;
+          const rangeMax = this.criterias().at(i).get('rangeMax').value;
+          searchParams[criteriaSelect] = 'gt:' + rangeMin + '*lt:' + rangeMax;
+        }
+        else if (criterias[i].criteriaValue === 'above__two_hundred_sma') {
+          searchParams[criteriaSelect] = 'gt:two_hundred_sma';
+        }
+        else if (criterias[i].criteriaValue === 'below__two_hundred_sma') {
+          searchParams[criteriaSelect] = 'lt:two_hundred_sma';
+        }
+        else if (criterias[i].criteriaValue === 'near__two_hundred_sma') {
+          searchParams[criteriaSelect] = 'nr:two_hundred_sma';
+        }
+        else { searchParams[criteriaSelect] = criterias[i].criteriaValue; }
+      }
+      else {
+        searchParams[criteriaSelect] = criterias[i].expressionSelect + ':' + criterias[i].criteriaValue;
+      }
+
+    }
+
+    return searchParams;
+  }
+
+
   getNextBatch(event: any): void {
-    console.log('scrolled ' + event);
     const totalPages = this.searchResults.totalNumberOfPages;
     let currentPage = this.searchResults.pageNumber;
 
     const end = this.viewport.getRenderedRange().end;
     const total = this.viewport.getDataLength();
-    console.log('The end is ' + end);
 
-    if (currentPage < totalPages && end === total){
+    if (currentPage < totalPages && end === total) {
       currentPage = currentPage + 1;
-      this.submit(currentPage);
+
+      const criterias = this.searchForm.value.criterias;
+
+      const searchParams = this.buildRequest(criterias);
+      searchParams.size = '50';
+      searchParams.date = '2021-02-12';
+      searchParams.page = currentPage;
+      this.searchService.search(searchParams).subscribe(data => {
+        const stockData = data.content;
+        for (const sd of stockData) {
+         // console.log('pushing ' + JSON.stringify(sd));
+          this.searchResults.content.push(sd);
+        }
+        // This is the notation for adding into immutable construct, also filtered duplicate values
+        this.searchResults.content = [...this.searchResults.content.filter(
+          (thing, i, arr) => arr.findIndex(t => t.symbol === thing.symbol) === i)];
+
+        this.searchResults.pageNumber = currentPage;
+        this.cd.detectChanges();
+
+        console.log('Total length of content  ' + this.searchResults.content.length);
+      });
+
+      // this.submit(currentPage);
     }
 
-    console.log('There are total ' + totalPages + ' pages. Current page is ' + currentPage );
+    console.log('There are total ' + totalPages + ' pages. Current page is ' + this.searchResults.pageNumber);
 
   }
 

@@ -164,7 +164,7 @@ input[type=number] {
     border-radius: 20px;
     margin-top: 30px;
     background-color: #1c313a;
-    height: 750px;
+    height: 600px;
     min-height: 380px;
     width: 100%;
 }
@@ -184,7 +184,7 @@ input[type=number] {
 
 /* infinite scrolling */
 cdk-virtual-scroll-viewport {
-    height: 70vh;
+    height: 60vh;
     margin: 0px;
     width: 100%;
     overflow-x: hidden;

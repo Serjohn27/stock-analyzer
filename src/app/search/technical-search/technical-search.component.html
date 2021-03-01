@@ -91,7 +91,7 @@
 
 
 
-<div #resultsContainer id="results-container">
+<div  #resultsContainer id="results-container" >
   <div fxLayout="column">
     <div class="results-header-container">
       <p class="results-header">Search Results</p>
@@ -129,7 +129,7 @@
     </div>
 
 
-    <cdk-virtual-scroll-viewport itemSize="48" *ngIf="searchResults!=null && searchResults.content.length!=0"
+    <cdk-virtual-scroll-viewport itemSize="20" *ngIf="searchResults!=null && searchResults.content.length!=0"
       (scrolledIndexChange)="getNextBatch($event)">
 
       <div fxLayout="row" class="full-width table-row"
@@ -151,13 +151,15 @@
           {{searchResult.lastPrice | number:'1.0-2'}}
         </div>
 
-        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100">
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100"
+          [style.color]="searchResult.technicals.daily_price_difference>0?'#32cb00':'#ff3d00'">
           {{searchResult.technicals.daily_price_difference | number:'1.0-3'}}
         </div>
 
-        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100">
-          {{(searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?(searchResult.percentChange
-          | number:'1.0-2') : "0" }}%
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100"
+          [style.color]="searchResult.percentChange>0?'#32cb00':'#ff3d00'">{{
+            (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
+            (searchResult.percentChange | number:'1.0-2') : "0" }}%
         </div>
 
         <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100">
