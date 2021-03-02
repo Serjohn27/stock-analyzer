@@ -137,7 +137,7 @@
 
 
     <cdk-virtual-scroll-viewport itemSize="20" *ngIf="searchResults!=null && searchResults.content.length!=0"
-      (scrolledIndexChange)="getNextBatch($event)">
+      (scrolledIndexChange)="getNextBatch($event)" [infiniteScrollDisabled]="busyGettingData">
 
       <div fxLayout="row" class="full-width table-row"
         *cdkVirtualFor="let searchResult of searchResults.content;let i=index">

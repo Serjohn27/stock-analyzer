@@ -3,6 +3,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown, faSort } from '@fortawesome/free-solid-svg-icons';
+import { throttleTime } from 'rxjs/operators';
 import { Page } from 'src/app/common/models/page';
 import { TechnicalSearchService } from './technical-search.service';
 
@@ -15,6 +16,7 @@ import { TechnicalSearchService } from './technical-search.service';
 export class TechnicalSearchComponent implements OnInit, AfterViewInit {
 
   faSort = faSort;
+  busyGettingData = false;
 
   criteriaAdded = false;
   searchForm: FormGroup;
@@ -215,7 +217,7 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
       /** spinner starts on init */
       searchParams.size = '50';
       searchParams.page = pageNumber;
-      this.searchService.search(searchParams).subscribe(data => {
+      this.searchService.search(searchParams).pipe(throttleTime(2000)).subscribe(data => {
         this.searchResults = data;
         console.log('results widht ' + this.resultsContainerWidth);
       });
@@ -261,6 +263,10 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
 
 
   getNextBatch(event: any): void {
+
+    if(this.busyGettingData) {
+      return;
+    }
     const totalPages = this.searchResults.totalNumberOfPages;
     let currentPage = this.searchResults.pageNumber;
 
@@ -276,7 +282,8 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
       searchParams.size = '50';
       searchParams.date = '2021-02-12';
       searchParams.page = currentPage;
-      this.searchService.search(searchParams).subscribe(data => {
+      this.busyGettingData = true;
+      this.searchService.search(searchParams).pipe(throttleTime(2000)).subscribe(data => {
         const stockData = data.content;
         for (const sd of stockData) {
          // console.log('pushing ' + JSON.stringify(sd));
@@ -290,6 +297,7 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
         this.cd.detectChanges();
 
         console.log('Total length of content  ' + this.searchResults.content.length);
+        this.busyGettingData = false;
       });
 
       // this.submit(currentPage);
