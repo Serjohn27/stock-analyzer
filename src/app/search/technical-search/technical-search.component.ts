@@ -217,13 +217,12 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
     console.log(this.searchForm.value);
     console.log(this.searchForm.value.criterias);
     const criterias = this.searchForm.value.criterias;
-    debugger;
     for (let i = 0; i < criterias.length; i++) {
       if (criterias[i].rangeMin != null && criterias[i].rangeMax != null && criterias[i].criteriaValue == null) {
         this.criterias().at(i).get('criteriaValue').patchValue('isRange');
       }
 
-      if (criterias[i].datepicker != null && criterias[i].criteriaValue == null && criterias.length > 1){
+      if (criterias[i].datepicker != null && criterias[i].criteriaValue == null && criterias[i].criteriaSelect === 'date'){
         this.criterias().at(i).get('criteriaValue').patchValue('isDate');
       }
     }
@@ -260,7 +259,7 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
           searchParams[criteriaSelect] = 'gt:' + rangeMin + '*lt:' + rangeMax;
         }
         else if (criteriaSelect === 'date' && criterias[i].datepicker != null && this.criterias().at(i).get('criteriaValue').value === 'isDate') {
-          searchParams.date = this.criterias().at(i).get('datepicker').value;
+          searchParams[criteriaSelect] = this.criterias().at(i).get('datepicker').value;
         }
 
         else if (criterias[i].criteriaValue === 'above__two_hundred_sma') {
