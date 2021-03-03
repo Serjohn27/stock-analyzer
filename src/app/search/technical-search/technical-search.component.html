@@ -43,6 +43,8 @@
 
     <div fxLayout="row" fxFlexOffset="2" fxFlex="42" [formGroupName]="i">
 
+      <input *ngIf="templates[i] && templates[i].type=='datepicker'" class="select-box datepicker" type="date" formControlName="datepicker" min="2020-01-01" max="2022-01-01" placeholder="templates[i].defaultValue">
+
       <input *ngIf="templates[i] && templates[i].type=='input'"
         [ngClass]="{'error': criteria.get('criteriaValue').value=='' ||criteria.get('criteriaValue').value==null && this.criteriaAdded}"
         id="input-box" formControlName="criteriaValue" class="select-box" type="number"
@@ -91,7 +93,7 @@
 
 
 
-<div  #resultsContainer id="results-container" >
+<div  #resultsContainer id="results-container" [style.visibility]="!searchResults?'hidden':'visible'">
   <div fxLayout="column">
     <div class="results-header-container">
       <p class="results-header">Search Results</p>

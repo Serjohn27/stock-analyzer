@@ -1,5 +1,6 @@
 import { trigger } from '@angular/animations';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { formatDate } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faChevronDown, faSort } from '@fortawesome/free-solid-svg-icons';
@@ -39,6 +40,7 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    console.log(formatDate(new Date(), 'yyyy-MM-dd', 'en'));
     this.searchForm = this.formBuilder.group({
       name: '',
       criterias: this.formBuilder.array([]),
@@ -61,20 +63,23 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
       expressionSelect: [expressionSelectDefault],
       criteriaValue: [criteriaValueDefault, Validators.required],
       rangeMin: [],
-      rangeMax: []
-      // datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
+      rangeMax: [],
+      datepicker: [formatDate(new Date(), 'yyyy-MM-dd', 'en')]
     });
   }
 
   addCriteria(): void {
     this.criteriaAdded = true;
 
-    if (this.searchForm.valid) {
+    if (this.searchForm.valid || this.criterias().at(this.criterias().length - 1).get('datepicker') != null) {
       this.criterias().push(this.newCriteria(null, null, null));
       this.templates.push({
         type: 'input',
         hint: 'Select a criteria from dropdown on the left'
       });
+    }
+    else {
+      console.log('Form is invalid while adding ' + JSON.stringify(this.searchForm.value))
     }
     // this.criteriaAdded = false;
   }
@@ -97,7 +102,8 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
       { id: 'price', name: 'Price' },
       { id: 'pricerange', name: 'Price Range' },
       { id: 'volume', name: 'Volume' },
-      { id: 'volumerange', name: 'Volume Range' }
+      { id: 'volumerange', name: 'Volume Range' },
+      { id: 'date', name: 'Date' }
 
       // { id: 'float', name: 'Float' },
       // { id: 'marketcap', name: 'Market Cap' }
@@ -186,6 +192,14 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
       };
     }
 
+    else if ('date' === selection) {
+      return {
+        type: 'datepicker',
+        expressionSelect: false,
+        defaultValue: `${formatDate(new Date(), 'yyyy-MM-dd', 'en')}`
+      };
+    }
+
   }
 
   onOptionSelected(eventTarget: any, index: number): void {
@@ -203,16 +217,20 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
     console.log(this.searchForm.value);
     console.log(this.searchForm.value.criterias);
     const criterias = this.searchForm.value.criterias;
-
+    debugger;
     for (let i = 0; i < criterias.length; i++) {
-      if (criterias[i][`rangeMin`] != null && criterias[i][`rangeMax`] != null && criterias[i][`criteriaValue`] == null) {
+      if (criterias[i].rangeMin != null && criterias[i].rangeMax != null && criterias[i].criteriaValue == null) {
         this.criterias().at(i).get('criteriaValue').patchValue('isRange');
+      }
+
+      if (criterias[i].datepicker != null && criterias[i].criteriaValue == null && criterias.length > 1){
+        this.criterias().at(i).get('criteriaValue').patchValue('isDate');
       }
     }
 
     if (this.searchForm.valid) {
       const searchParams = this.buildRequest(criterias);
-      searchParams.date = '2021-02-12';
+     // searchParams.date = '2021-02-12';
       console.log('Criterias  ' + JSON.stringify(searchParams));
       /** spinner starts on init */
       searchParams.size = '50';
@@ -241,6 +259,10 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
           const rangeMax = this.criterias().at(i).get('rangeMax').value;
           searchParams[criteriaSelect] = 'gt:' + rangeMin + '*lt:' + rangeMax;
         }
+        else if (criteriaSelect === 'date' && criterias[i].datepicker != null && this.criterias().at(i).get('criteriaValue').value === 'isDate') {
+          searchParams.date = this.criterias().at(i).get('datepicker').value;
+        }
+
         else if (criterias[i].criteriaValue === 'above__two_hundred_sma') {
           searchParams[criteriaSelect] = 'gt:two_hundred_sma';
         }
@@ -257,7 +279,6 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
       }
 
     }
-
     return searchParams;
   }
 
@@ -297,6 +318,7 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
         this.cd.detectChanges();
 
         console.log('Total length of content  ' + this.searchResults.content.length);
+        // This prevents data from loading multiple times when scroll event is triggered
         this.busyGettingData = false;
       });
 
