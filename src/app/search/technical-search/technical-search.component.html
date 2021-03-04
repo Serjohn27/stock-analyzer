@@ -107,7 +107,7 @@
 
     <div *ngIf="searchResults!=null && searchResults.content.length!=0" fxLayout="row" class="full-width table-row table-header">
       <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
-        Index
+        Date
         <button class="sort-button" (click)="sortBy('index')"><fa-icon [icon]="faSort"></fa-icon></button>
       </div>
       <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
@@ -118,22 +118,27 @@
         Name
         <button class="sort-button" (click)="sortBy('name')"><fa-icon [icon]="faSort"></fa-icon></button>
       </div>
-      <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
         Price
         <button class="sort-button" (click)="sortBy('price')"><fa-icon  [icon]="faSort"></fa-icon></button>
       </div>
-      <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
         Today's Change
         <button class="sort-button" (click)="sortBy('todayschange')"><fa-icon  [icon]="faSort"></fa-icon></button>
       </div>
-      <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
         Today's Change %
         <button class="sort-button" (click)="sortBy('todayschangeper')"><fa-icon [icon]="faSort"></fa-icon></button>
       </div>
-      <div [style.width.px]="this.resultsContainerWidth* 13 / 100">
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
         Volume
         <button class="sort-button" (click)="sortBy('volume')"><fa-icon  [icon]="faSort"></fa-icon></button>
       </div>
+      <div [style.width.px]="this.resultsContainerWidth* 12 / 100">
+        RSI
+        <button class="sort-button" (click)="sortBy('volume')"><fa-icon  [icon]="faSort"></fa-icon></button>
+      </div>
+
 
     </div>
 
@@ -145,7 +150,7 @@
         *cdkVirtualFor="let searchResult of searchResults.content;let i=index">
 
         <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
-          {{i}}
+          {{searchResult.date | date:'yyyy-MM-dd' : 'UTC' }}
         </div>
 
         <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
@@ -156,23 +161,27 @@
           {{searchResult.fundamentals.company_name}}
         </div>
 
-        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100">
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
           {{searchResult.lastPrice | number:'1.0-2'}}
         </div>
 
-        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100"
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100"
           [style.color]="searchResult.technicals.daily_price_difference>0?'#32cb00':'#ff3d00'">
           {{searchResult.technicals.daily_price_difference | number:'1.0-3'}}
         </div>
 
-        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100"
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100"
           [style.color]="searchResult.percentChange>0?'#32cb00':'#ff3d00'">{{
             (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
             (searchResult.percentChange | number:'1.0-2') : "0" }}%
         </div>
 
-        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 13 / 100">
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
           {{searchResult.lastVolume | shortNumber}}
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 12 / 100">
+          {{searchResult.technicals.rsi | number:'1.0-0'}}
         </div>
 
       </div>
