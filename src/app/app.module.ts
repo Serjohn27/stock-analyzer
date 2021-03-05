@@ -16,8 +16,9 @@ import { TechnicalSearchComponent } from './search/technical-search/technical-se
 
 import { ShortNumberPipe } from '../app/common/pipes/short-number.pipe';
 
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { CustomHttpInterceptor } from './common/interceptor/custom-http-interceptor/custom-http-interceptor';
+import { FundamentalSearchComponent } from './search/fundamental-search/fundamental-search.component';
 
 
 
@@ -27,7 +28,8 @@ import { CustomHttpInterceptor } from './common/interceptor/custom-http-intercep
     AppComponent,
     NavigationBarComponent,
     QuoteSearchComponent,
-    TechnicalSearchComponent
+    TechnicalSearchComponent,
+    FundamentalSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,8 @@ import { CustomHttpInterceptor } from './common/interceptor/custom-http-intercep
     NgxSpinnerModule,
     BrowserAnimationsModule
   ],
-  providers: [ShortNumberPipe,
+  providers: [
+    ShortNumberPipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CustomHttpInterceptor,

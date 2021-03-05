@@ -1,9 +1,13 @@
 <nav class="navbar">
-    <ul>
-      <div class="logo"><li><img  src="../assets/images/money-bag.svg"></div>
-      <div class="navlink"><li><a href="#" routerLinkActive="active">HOME</a></li></div>
-      <div class="navlink"><li><a [routerLink]="['technical-search']" routerLinkActive="active">TECHNICAL SEARCH</a></li></div>
-      <div class="navlink"><li><a href="#" routerLinkActive="active">FUNDAMENTAL SEARCH</a></li></div>
-      <div class="navlink"><li><a href="#" routerLinkActive="active">TRADE IDEAS</a></li></div>
-    </ul>
-  </nav>
+  <ul>
+    <div class="logo">
+      <li><img src="../assets/images/money-bag.svg">
+    </div>
+    <div class="navlink" routerLinkActive="active">
+      <li><a [routerLink]="['technical-search']" class="active" >TECHNICAL SEARCH</a></li>
+    </div>
+    <div class="navlink" routerLinkActive="active">
+      <li><a [routerLink]="['fundamental-search']" routerLinkActive="active">FUNDAMENTAL SEARCH</a></li>
+    </div>
+  </ul>
+</nav>

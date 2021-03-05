@@ -26,7 +26,8 @@
     border-bottom-width: 3px;
 }
 
-.navlink :active {
+
+ .navlink :active {
     border-bottom-color:  #52e3c2;
     border-bottom-width: 3px;
 }
@@ -42,6 +43,6 @@ ul {
     height: 50px;
     float: left;
     padding-bottom: 12px;
-    padding-left: 15px; 
-    padding-right: 15px; 
+    padding-left: 15px;
+    padding-right: 15px;
 }
