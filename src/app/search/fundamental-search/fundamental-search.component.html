@@ -1,1 +1,199 @@
-<p>fundamental-search works!</p>
+<p class="title">Fundamental Search</p>
+<form [formGroup]="searchForm">
+
+  <div formArrayName="criterias" *ngFor="let criteria of criterias().controls;let i=index" class="selectContainer">
+    <div fxFlex="42" [formGroupName]="i">
+      <select
+        [ngClass]="{'error': criteria.get('criteriaSelect').value=='' ||criteria.get('criteriaSelect').value==null && this.criteriaAdded}"
+        class="select-box" formControlName="criteriaSelect" (change)="onOptionSelected($event.target,i)"
+        [style.color]="!criteria.get('criteriaSelect').dirty?'#62757f':'white'">
+        <option class="defaultOption" [ngValue]=null [selected]="true" [disabled]="true">Select a technical
+          indicator</option>
+        <option class="option" *ngFor="let dropdownOption of getCriteriaOptions(); let i = index"
+          [value]="dropdownOption.id">
+          {{dropdownOption.name}}
+        </option>
+      </select>
+      <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
+    </div>
+
+    <div fxFlexOffset="2" fxFlex="12" [formGroupName]="i">
+      <div *ngIf="templates[i].expressionSelect">
+        <select
+          [ngClass]="{'error': criteria.get('expressionSelect').value=='' ||criteria.get('expressionSelect').value==null && this.criteriaAdded}"
+          id="sign-select" class="select-box" formControlName="expressionSelect"
+          [style.color]="!criteria.get('expressionSelect').dirty?'#62757f':'white'"
+          [style.font-size]="!criteria.get('expressionSelect').dirty ?'16px':'24px'">
+          <option class="defaultOption" [ngValue]=null [selected]=true [disabled]=true>Select</option>
+          <option class="option" *ngFor="let expressionOption of getExpressionOptions();let i = index"
+            [value]="expressionOption.id">
+            {{expressionOption.name}}
+          </option>
+        </select>
+        <fa-icon class="icon" [icon]="faChevronDown"></fa-icon>
+      </div>
+      <div *ngIf="!templates[i].expressionSelect"
+        style="background-color: #1c313a; width: 100%;height: 100%; border-radius: 10px;">
+        <div style="color:gray;text-align: center; padding-top: 15px;">
+          <!-- <span>Is</span> -->
+        </div>
+      </div>
+    </div>
+
+
+    <div fxLayout="row" fxFlexOffset="2" fxFlex="42" [formGroupName]="i">
+
+      <input *ngIf="templates[i] && templates[i].type=='datepicker'" class="select-box datepicker" type="date" formControlName="datepicker" min="2020-01-01" max="2022-01-01" placeholder="templates[i].defaultValue">
+
+      <input *ngIf="templates[i] && templates[i].type=='input'"
+        [ngClass]="{'error': criteria.get('criteriaValue').value=='' ||criteria.get('criteriaValue').value==null && this.criteriaAdded}"
+        id="input-box" formControlName="criteriaValue" class="select-box" type="number"
+        [placeholder]="templates[i].hint" [attr.disabled]="criteria.value.criteriaSelect == null ? 'disabled' : null">
+
+
+      <select *ngIf="templates[i] && templates[i].type=='select'"
+        [ngClass]="{'error': criteria.get('criteriaValue').value=='' ||criteria.get('criteriaValue').value==null && this.criteriaAdded}"
+        id="sign-select-2" class="select-box" formControlName="criteriaValue" style="color:#62757f"
+        [style.color]="!criteria.get('criteriaValue').dirty?'#62757f':'white'">
+        <option class="defaultOption" [ngValue]=null [selected]=true [disabled]="true">Select an option below
+        </option>
+        <option class="option" *ngFor="let option of templates[i].options;let i = index" [value]="option.id">
+          {{option.name}}
+        </option>
+      </select>
+
+      <div class="rangeInputContainer" fxLayout="row" fxLayoutAlign="space-between"
+        *ngIf="templates[i] && templates[i].type=='range'">
+        <input *ngIf="templates[i] && templates[i].type=='range'" id="range-min" formControlName="rangeMin"
+          class="range" type="number" placeholder="Enter Min Value">
+        <span style="padding-top:15px;">and</span>
+        <input *ngIf="templates[i] && templates[i].type=='range'" id="range-max" formControlName="rangeMax"
+          class="range" type="number" placeholder="Enter Max Value">
+      </div>
+
+
+      <button id="cancel-button" (click)="removeCriteria(i)">
+        <svg id="cancel-icon" height="329pt" viewBox="0 0 329.26933 329" width="329pt"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="m194.800781 164.769531 128.210938-128.214843c8.34375-8.339844 8.34375-21.824219 0-30.164063-8.339844-8.339844-21.824219-8.339844-30.164063 0l-128.214844 128.214844-128.210937-128.214844c-8.34375-8.339844-21.824219-8.339844-30.164063 0-8.34375 8.339844-8.34375 21.824219 0 30.164063l128.210938 128.214843-128.210938 128.214844c-8.34375 8.339844-8.34375 21.824219 0 30.164063 4.15625 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921875-2.089844 15.082031-6.25l128.210937-128.214844 128.214844 128.214844c4.160156 4.160156 9.621094 6.25 15.082032 6.25 5.460937 0 10.921874-2.089844 15.082031-6.25 8.34375-8.339844 8.34375-21.824219 0-30.164063zm0 0" />
+        </svg>
+      </button>
+
+    </div>
+
+  </div>
+  <div fxLayout="row">
+    <button id="add-button" (click)="addCriteria()">Add Criteria</button>
+    <button id="search-button" (click)="submit(0)">Search</button>
+  </div>
+
+</form>
+
+
+
+
+<div  #resultsContainer id="results-container" [style.visibility]="!searchResults?'hidden':'visible'">
+  <div fxLayout="column">
+    <div class="results-header-container">
+      <p class="results-header">Search Results</p>
+    </div>
+    <hr style="width: 100%; border: 1px black solid;">
+
+
+
+    <span *ngIf="searchResults!=null && searchResults.content.length==0"
+      style="text-align: center; padding: 20px; color: grey; font-style: italic;">No results found..</span>
+
+    <div *ngIf="searchResults!=null && searchResults.content.length!=0" fxLayout="row" class="full-width table-row table-header">
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
+        Date
+        <button class="sort-button" (click)="sortBy('index')"><fa-icon [icon]="faSort"></fa-icon></button>
+      </div>
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
+        Symbol
+        <button class="sort-button" (click)="sortBy('symbol')"><fa-icon  [icon]="faSort"></fa-icon></button>
+      </div>
+      <div [style.width.px]="this.resultsContainerWidth* 26 / 100">
+        Name
+        <button class="sort-button" (click)="sortBy('name')"><fa-icon [icon]="faSort"></fa-icon></button>
+      </div>
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
+        Price
+        <button class="sort-button" (click)="sortBy('price')"><fa-icon  [icon]="faSort"></fa-icon></button>
+      </div>
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
+        Today's Change
+        <button class="sort-button" (click)="sortBy('todayschange')"><fa-icon  [icon]="faSort"></fa-icon></button>
+      </div>
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
+        Today's Change %
+        <button class="sort-button" (click)="sortBy('todayschangeper')"><fa-icon [icon]="faSort"></fa-icon></button>
+      </div>
+      <div [style.width.px]="this.resultsContainerWidth* 10 / 100">
+        Volume
+        <button class="sort-button" (click)="sortBy('volume')"><fa-icon  [icon]="faSort"></fa-icon></button>
+      </div>
+      <div [style.width.px]="this.resultsContainerWidth* 12 / 100">
+        RSI
+        <button class="sort-button" (click)="sortBy('volume')"><fa-icon  [icon]="faSort"></fa-icon></button>
+      </div>
+
+
+    </div>
+
+
+    <cdk-virtual-scroll-viewport itemSize="20" *ngIf="searchResults!=null && searchResults.content.length!=0"
+      (scrolledIndexChange)="getNextBatch($event)" [infiniteScrollDisabled]="busyGettingData">
+
+      <div fxLayout="row" class="full-width table-row"
+        *cdkVirtualFor="let searchResult of searchResults.content;let i=index">
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
+          {{searchResult.date | date:'yyyy-MM-dd' : 'UTC' }}
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
+          {{searchResult.symbol}}
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 26 / 100">
+          {{searchResult.fundamentals.company_name}}
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
+          {{searchResult.lastPrice | number:'1.0-2'}}
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100"
+          [style.color]="searchResult.technicals.daily_price_difference>0?'#32cb00':'#ff3d00'">
+          {{searchResult.technicals.daily_price_difference | number:'1.0-3'}}
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100"
+          [style.color]="searchResult.percentChange>0?'#32cb00':'#ff3d00'">{{
+            (searchResult.percentChange !== 0 && isNotANumber(searchResult.percentChange) ) ?
+            (searchResult.percentChange | number:'1.0-2') : "0" }}%
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 10 / 100">
+          {{searchResult.lastVolume | shortNumber}}
+        </div>
+
+        <div class="table-column" [style.width.px]="this.resultsContainerWidth* 12 / 100">
+          {{searchResult.technicals.rsi | number:'1.0-0'}}
+        </div>
+
+      </div>
+
+
+    </cdk-virtual-scroll-viewport>
+
+
+
+
+
+
+  </div>
+
+</div>

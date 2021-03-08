@@ -284,7 +284,7 @@ export class TechnicalSearchComponent implements OnInit, AfterViewInit {
 
   getNextBatch(event: any): void {
 
-    if(this.busyGettingData) {
+    if (this.busyGettingData) {
       return;
     }
     const totalPages = this.searchResults.totalNumberOfPages;
